@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.tenshi18.imeiimsidecoder.ui.screens.imei.IMEIScreen
 import com.tenshi18.imeiimsidecoder.ui.theme.IMEIIMSIDecoderTheme
+import com.tenshi18.imeiimsidecoder.ui.view.NavBar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,7 +14,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             IMEIIMSIDecoderTheme {
-                IMEIScreen()
+
+                NavBar()
 
             }
         }
