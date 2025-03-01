@@ -1,10 +1,8 @@
 package com.tenshi18.imeiimsidecoder.ui.components
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
@@ -26,9 +24,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -46,7 +42,7 @@ data class NavItem(val label: String, val icon: ImageVector)
 fun NavigationController() {
     val navController: NavHostController = rememberNavController()
 
-    // Нижняя навигация: только IMEI, IMSI и History
+    // Три пункта нижней навигации
     val navItems = listOf(
         NavItem("IMEI", Icons.Filled.Phone),
         NavItem("IMSI", Icons.Filled.SimCard),
@@ -59,23 +55,15 @@ fun NavigationController() {
     Scaffold(
         topBar = {
             TopAppBar(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(
-                        RoundedCornerShape(
-                            bottomStart = 15.dp,
-                            bottomEnd = 15.dp
-                        )
-                    ),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ),
                 title = { Text(screenTitle) },
+                // Кнопка настроек
                 actions = {
-                    // Переход на экран настроек по нажатию на значок в TopAppBar
                     IconButton(onClick = {
+                        // Переход на экран "Settings"
                         navController.navigate("Settings") {
-                            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
                             launchSingleTop = true
                             restoreState = true
                         }
@@ -83,11 +71,14 @@ fun NavigationController() {
                         Icon(
                             imageVector = Icons.Filled.Settings,
                             contentDescription = "Settings",
-                            modifier = Modifier,
                             tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
-                }
+                },
+                // Цвета
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
             )
         },
         bottomBar = {
@@ -99,9 +90,10 @@ fun NavigationController() {
                         selected = selectedItemIndex == index,
                         onClick = {
                             selectedItemIndex = index
-                            val route = item.label  // маршруты: "IMEI", "IMSI", "History"
-                            navController.navigate(route) {
-                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                            navController.navigate(item.label) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
                                 launchSingleTop = true
                                 restoreState = true
                             }
@@ -115,34 +107,30 @@ fun NavigationController() {
                     )
                 }
             }
-        },
-        content = { paddingValues: PaddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                NavigationHost(navController = navController)
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            NavHost(navController = navController, startDestination = "IMEI") {
+                composable("IMEI") { IMEIScreen() }
+                composable("IMSI") { IMSIScreen() }
+                composable("History") { HistoryScreen() }
+                // Обязательно должен быть экран "Settings"
+                composable("Settings") { SettingsScreen() }
             }
         }
-    )
-
-    // Обновляем selectedItemIndex при изменении маршрута (для экранов нижней навигации)
-    navController.addOnDestinationChangedListener { _, destination, _ ->
-        when (destination.route) {
-            "IMEI" -> selectedItemIndex = 0
-            "IMSI" -> selectedItemIndex = 1
-            "History" -> selectedItemIndex = 2
-        }
     }
-}
 
-@Composable
-fun NavigationHost(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "IMEI") {
-        composable("IMEI") { IMEIScreen() }
-        composable("IMSI") { IMSIScreen() }
-        composable("History") { HistoryScreen() }
-        composable("Settings") { SettingsScreen() }
+    // Слушаем изменение маршрута, чтобы обновлять selectedItemIndex
+    navController.addOnDestinationChangedListener { _, destination, _ ->
+        selectedItemIndex = when (destination.route) {
+            "IMEI" -> 0
+            "IMSI" -> 1
+            "History" -> 2
+            else -> selectedItemIndex
+        }
     }
 }
