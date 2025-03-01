@@ -4,9 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.tenshi18.imeiimsidecoder.ui.screens.imei.IMEIScreen
 import com.tenshi18.imeiimsidecoder.ui.theme.IMEIIMSIDecoderTheme
-import com.tenshi18.imeiimsidecoder.ui.view.NavBar
+import com.tenshi18.imeiimsidecoder.ui.components.NavigationController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +14,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             IMEIIMSIDecoderTheme {
 
-                NavBar()
+                NavigationController()
 
             }
         }
