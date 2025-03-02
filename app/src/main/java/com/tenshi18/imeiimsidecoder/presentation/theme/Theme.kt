@@ -1,4 +1,5 @@
-package com.tenshi18.imeiimsidecoder.ui.theme
+package com.tenshi18.imeiimsidecoder.presentation.theme
+
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
@@ -252,7 +253,7 @@ val unspecified_scheme = ColorFamily(
 )
 
 @Composable
-fun AppTheme(
+fun IMEIIMSIDecoderTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,

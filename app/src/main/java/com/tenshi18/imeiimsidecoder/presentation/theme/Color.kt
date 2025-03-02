@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.ui.theme
+package com.tenshi18.imeiimsidecoder.presentation.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF5A5892)

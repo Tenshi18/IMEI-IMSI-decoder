@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.ui.theme
+package com.tenshi18.imeiimsidecoder.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

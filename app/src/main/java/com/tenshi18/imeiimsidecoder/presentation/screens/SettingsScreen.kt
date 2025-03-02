@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.ui.screens
+package com.tenshi18.imeiimsidecoder.presentation.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.ui.components
+package com.tenshi18.imeiimsidecoder.presentation.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,10 +30,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.tenshi18.imeiimsidecoder.ui.screens.HistoryScreen
-import com.tenshi18.imeiimsidecoder.ui.screens.IMEIScreen
-import com.tenshi18.imeiimsidecoder.ui.screens.IMSIScreen
-import com.tenshi18.imeiimsidecoder.ui.screens.SettingsScreen
+import com.tenshi18.imeiimsidecoder.presentation.screens.HistoryScreen
+import com.tenshi18.imeiimsidecoder.presentation.screens.IMEIScreen
+import com.tenshi18.imeiimsidecoder.presentation.screens.IMSIScreen
+import com.tenshi18.imeiimsidecoder.presentation.screens.SettingsScreen
 
 data class NavItem(val label: String, val icon: ImageVector)
 
