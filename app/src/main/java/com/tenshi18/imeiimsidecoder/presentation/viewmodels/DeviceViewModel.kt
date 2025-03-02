@@ -1,10 +1,10 @@
-package com.tenshi18.imeiimsidecoder.viewmodel
+package com.tenshi18.imeiimsidecoder.presentation.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.tenshi18.imeiimsidecoder.data.db.DatabaseProviderTac
-import com.tenshi18.imeiimsidecoder.data.db.Tac
+import com.tenshi18.imeiimsidecoder.data.local.db.DatabaseProviderTac
+import com.tenshi18.imeiimsidecoder.data.local.db.Tac
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State

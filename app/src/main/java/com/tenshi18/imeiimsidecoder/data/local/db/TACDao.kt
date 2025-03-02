@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.data.db
+package com.tenshi18.imeiimsidecoder.data.local.db
 
 import androidx.room.Dao
 import androidx.room.Insert

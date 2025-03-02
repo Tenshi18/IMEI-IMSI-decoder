@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.data.db
+package com.tenshi18.imeiimsidecoder.data.local.db
 
 import android.content.Context
 import androidx.room.Room
