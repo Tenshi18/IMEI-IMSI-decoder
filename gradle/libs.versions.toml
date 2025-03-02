@@ -7,6 +7,7 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxCoroutinesAndroid = "1.7.3"
+lifecycleRuntimeCompose = "2.8.7"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2025.02.00"
@@ -25,6 +26,7 @@ roomKtx = "2.6.1"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore = { module = "androidx.datastore:datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-material-android = { module = "androidx.compose.material:material-android", version.ref = "materialAndroid" }
 androidx-material-icons = { module = "androidx.compose.material3:material-icons" }
