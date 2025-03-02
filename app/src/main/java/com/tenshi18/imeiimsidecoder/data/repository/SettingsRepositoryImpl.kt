@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.presentation.viewmodels
+package com.tenshi18.imeiimsidecoder.data.repository
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,7 +12,7 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     // Подписываемся на Flow<Boolean> из репозитория и превращаем в StateFlow, чтобы удобно использовать в Compose
-    val useDynamicColoursFlow = settingsRepository.useDynamicColoursFlow
+    val useDynamicColorFlow = settingsRepository.useDynamicColoursFlow
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -20,7 +20,7 @@ class SettingsViewModel(
         )
 
     // Метод для обновления настройки
-    fun setDynamicColoursEnabled(enabled: Boolean) {
+    fun setDynamicColorEnabled(enabled: Boolean) {
         viewModelScope.launch {
             settingsRepository.setDynamicColoursEnabled(enabled)
         }

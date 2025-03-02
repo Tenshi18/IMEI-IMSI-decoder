@@ -30,6 +30,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.tenshi18.imeiimsidecoder.data.local.SettingsLocalDataSource
 import com.tenshi18.imeiimsidecoder.presentation.screens.HistoryScreen
 import com.tenshi18.imeiimsidecoder.presentation.screens.IMEIScreen
 import com.tenshi18.imeiimsidecoder.presentation.screens.IMSIScreen
@@ -118,8 +119,7 @@ fun NavigationController() {
                 composable("IMEI") { IMEIScreen() }
                 composable("IMSI") { IMSIScreen() }
                 composable("History") { HistoryScreen() }
-                // Обязательно должен быть экран "Settings"
-                composable("Settings") { SettingsScreen() }
+                composable("Settings") { TODO() }
             }
         }
     }

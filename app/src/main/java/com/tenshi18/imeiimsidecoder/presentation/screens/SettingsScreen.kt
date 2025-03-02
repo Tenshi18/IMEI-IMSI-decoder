@@ -1,28 +1,33 @@
 package com.tenshi18.imeiimsidecoder.presentation.screens
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.tenshi18.imeiimsidecoder.presentation.viewmodels.SettingsViewModel
+import androidx.compose.runtime.collectAsState
 
 @Composable
-fun SettingsScreen() {
-    val (isEnabled, setIsEnabled) = remember { mutableStateOf(false) }
+fun SettingsScreen(settingsViewModel: SettingsViewModel) {
 
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Настройки", style = MaterialTheme.typography.headlineMedium)
-            Switch(checked = isEnabled, onCheckedChange = { setIsEnabled(it) })
-            Text(text = if (isEnabled) "Включено" else "Выключено")
+    // Подписываемся на StateFlow из ViewModel и используем его в Composable
+    val useDynamicColours by settingsViewModel.useDynamicColoursFlow.collectAsState()
+
+    Column (modifier = Modifier.padding(16.dp)){
+        Text(text = "Настройки")
+
+        Row {
+            Text(text = "Динамческая тема (Material You)")
+            Switch(
+                checked = useDynamicColours,
+                onCheckedChange = { settingsViewModel.setDynamicColoursEnabled(it) }
+            )
         }
     }
+
 }
