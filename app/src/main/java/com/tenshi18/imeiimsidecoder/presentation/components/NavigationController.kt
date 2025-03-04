@@ -35,12 +35,13 @@ import com.tenshi18.imeiimsidecoder.presentation.screens.HistoryScreen
 import com.tenshi18.imeiimsidecoder.presentation.screens.IMEIScreen
 import com.tenshi18.imeiimsidecoder.presentation.screens.IMSIScreen
 import com.tenshi18.imeiimsidecoder.presentation.screens.SettingsScreen
+import com.tenshi18.imeiimsidecoder.presentation.viewmodels.SettingsViewModel
 
 data class NavItem(val label: String, val icon: ImageVector)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationController() {
+fun NavigationController(settingsViewModel: SettingsViewModel) {
     val navController: NavHostController = rememberNavController()
 
     // Три пункта нижней навигации
@@ -119,7 +120,7 @@ fun NavigationController() {
                 composable("IMEI") { IMEIScreen() }
                 composable("IMSI") { IMSIScreen() }
                 composable("History") { HistoryScreen() }
-                composable("Settings") { TODO() }
+                composable("Settings") { SettingsScreen(settingsViewModel) }
             }
         }
     }
