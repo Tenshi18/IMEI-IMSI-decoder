@@ -2,27 +2,21 @@ package com.tenshi18.imeiimsidecoder.data.repository
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tenshi18.imeiimsidecoder.data.local.SettingsLocalDataSource
 import com.tenshi18.imeiimsidecoder.domain.repository.SettingsRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class SettingsViewModel(
-    private val settingsRepository: SettingsRepository
-) : ViewModel() {
+class SettingsRepositoryImpl(
+    private val localDataSource: SettingsLocalDataSource
+) : SettingsRepository {
 
-    // Подписываемся на Flow<Boolean> из репозитория и превращаем в StateFlow, чтобы удобно использовать в Compose
-    val useDynamicColorFlow = settingsRepository.useDynamicColoursFlow
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = true // пока не загрузились реальные данные
-        )
+    override val useDynamicColoursFlow: Flow<Boolean>
+        get() = localDataSource.useDynamicColoursFlow
 
-    // Метод для обновления настройки
-    fun setDynamicColorEnabled(enabled: Boolean) {
-        viewModelScope.launch {
-            settingsRepository.setDynamicColoursEnabled(enabled)
-        }
+    override suspend fun setDynamicColoursEnabled(enabled: Boolean) {
+        localDataSource.setDynamicColoursEnabled(enabled)
     }
 }
