@@ -35,9 +35,9 @@ class SettingsLocalDataSource(
             preferences[USE_DYNAMIC_COLOURS_KEY] ?: true
         }
 
-    suspend fun setDynamicColoursEnabled(value: Boolean) {
+    suspend fun setDynamicColoursEnabled(enabled: Boolean) {
         context.settingsDataStore.edit { preferences ->
-            preferences[USE_DYNAMIC_COLOURS_KEY] = value
+            preferences[USE_DYNAMIC_COLOURS_KEY] = enabled
         }
     }
 }
