@@ -15,7 +15,7 @@ import androidx.compose.runtime.collectAsState
 @Composable
 fun SettingsScreen(settingsViewModel: SettingsViewModel) {
 
-    // Подписываемся на StateFlow из ViewModel и используем его в Composable
+    // Подписываемся на StateFlow из ViewModel
     val useDynamicColours by settingsViewModel.useDynamicColoursFlow.collectAsState()
 
     Column (modifier = Modifier.padding(16.dp)){
