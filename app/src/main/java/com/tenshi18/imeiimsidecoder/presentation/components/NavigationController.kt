@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SimCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -30,7 +31,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.tenshi18.imeiimsidecoder.data.local.SettingsLocalDataSource
 import com.tenshi18.imeiimsidecoder.presentation.screens.HistoryScreen
 import com.tenshi18.imeiimsidecoder.presentation.screens.IMEIScreen
 import com.tenshi18.imeiimsidecoder.presentation.screens.IMSIScreen
@@ -105,7 +105,13 @@ fun NavigationController(settingsViewModel: SettingsViewModel) {
                                 imageVector = item.icon,
                                 contentDescription = item.label
                             )
-                        }
+                        },
+
+                        colors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = MaterialTheme.colorScheme.primary,
+                            unselectedIconColor = MaterialTheme.colorScheme.onPrimary
+                        )
+
                     )
                 }
             }
