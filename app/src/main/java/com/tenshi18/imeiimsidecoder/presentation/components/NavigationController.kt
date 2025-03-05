@@ -30,6 +30,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tenshi18.imeiimsidecoder.presentation.screens.HistoryScreen
 import com.tenshi18.imeiimsidecoder.presentation.screens.IMEIScreen
@@ -43,6 +44,18 @@ data class NavItem(val label: String, val icon: ImageVector)
 @Composable
 fun NavigationController(settingsViewModel: SettingsViewModel) {
     val navController: NavHostController = rememberNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+
+    val showBottomBar = (currentRoute != "Settings")
+
+    val screenTitle = when (currentRoute) {
+        "IMEI" -> "IMEI"
+        "IMSI" -> "IMSI"
+        "History" -> "История"
+        "Settings" -> "Настройки"
+        else -> "IMEI"
+    }
 
     // Три пункта нижней навигации
     val navItems = listOf(
@@ -52,29 +65,28 @@ fun NavigationController(settingsViewModel: SettingsViewModel) {
     )
 
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
-    val screenTitle = navItems.getOrNull(selectedItemIndex)?.label ?: "IMEI"
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text(screenTitle) },
-                // Кнопка настроек
                 actions = {
-                    IconButton(onClick = {
-                        // Переход на экран "Settings"
-                        navController.navigate("Settings") {
-                            popUpTo(navController.graph.findStartDestination().id) {
-                                saveState = true
+                    if (currentRoute != "Settings") {
+                        IconButton(onClick = {
+                            navController.navigate("Settings") {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                            launchSingleTop = true
-                            restoreState = true
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = "Settings",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
                         }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Filled.Settings,
-                            contentDescription = "Settings",
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
                     }
                 },
                 // Цвета
@@ -84,44 +96,43 @@ fun NavigationController(settingsViewModel: SettingsViewModel) {
             )
         },
         bottomBar = {
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.primary
-            ) {
-                navItems.forEachIndexed { index, item ->
-                    NavigationBarItem(
-                        selected = selectedItemIndex == index,
-                        onClick = {
-                            selectedItemIndex = index
-                            navController.navigate(item.label) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+
+            if (showBottomBar) {
+                NavigationBar(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ) {
+                    navItems.forEachIndexed { index, item ->
+                        NavigationBarItem(
+                            selected = selectedItemIndex == index,
+                            onClick = {
+                                selectedItemIndex = index
+                                navController.navigate(item.label) {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = item.icon,
-                                contentDescription = item.label
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = item.icon,
+                                    contentDescription = item.label
+                                )
+                            },
+
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = MaterialTheme.colorScheme.primary,
+                                unselectedIconColor = MaterialTheme.colorScheme.onPrimary
                             )
-                        },
 
-                        colors = NavigationBarItemDefaults.colors(
-                            selectedIconColor = MaterialTheme.colorScheme.primary,
-                            unselectedIconColor = MaterialTheme.colorScheme.onPrimary
                         )
-
-                    )
+                    }
                 }
             }
         }
     ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
+        Box(modifier = Modifier.padding(paddingValues)) {
             NavHost(navController = navController, startDestination = "IMEI") {
                 composable("IMEI") { IMEIScreen() }
                 composable("IMSI") { IMSIScreen() }
