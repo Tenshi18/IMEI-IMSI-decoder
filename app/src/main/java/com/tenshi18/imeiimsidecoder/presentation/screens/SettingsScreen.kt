@@ -9,11 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.tenshi18.imeiimsidecoder.presentation.viewmodels.SettingsViewModel
 import androidx.compose.runtime.collectAsState
+import com.tenshi18.imeiimsidecoder.presentation.viewmodels.SettingsViewModel
 
 @Composable
-fun SettingsScreen(settingsViewModel: SettingsViewModel) {
+fun SettingsScreen(settingsViewModel : SettingsViewModel) {
 
     // Подписываемся на StateFlow из ViewModel
     val useDynamicColours by settingsViewModel.useDynamicColoursFlow.collectAsState()
