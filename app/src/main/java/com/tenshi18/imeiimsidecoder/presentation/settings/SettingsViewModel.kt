@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.presentation.viewmodels
+package com.tenshi18.imeiimsidecoder.presentation.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

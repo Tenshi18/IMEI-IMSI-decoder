@@ -1,6 +1,5 @@
-package com.tenshi18.imeiimsidecoder.presentation.screens
+package com.tenshi18.imeiimsidecoder.presentation.settings
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment.Companion.CenterVertically
-import com.tenshi18.imeiimsidecoder.presentation.viewmodels.SettingsViewModel
 
 @Composable
 fun SettingsScreen(settingsViewModel : SettingsViewModel) {

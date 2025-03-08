@@ -11,7 +11,7 @@ import com.tenshi18.imeiimsidecoder.data.local.SettingsLocalDataSource
 import com.tenshi18.imeiimsidecoder.data.repository.SettingsRepositoryImpl
 import com.tenshi18.imeiimsidecoder.presentation.theme.IMEIIMSIDecoderTheme
 import com.tenshi18.imeiimsidecoder.presentation.components.NavigationController
-import com.tenshi18.imeiimsidecoder.presentation.viewmodels.SettingsViewModel
+import com.tenshi18.imeiimsidecoder.presentation.settings.SettingsViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
