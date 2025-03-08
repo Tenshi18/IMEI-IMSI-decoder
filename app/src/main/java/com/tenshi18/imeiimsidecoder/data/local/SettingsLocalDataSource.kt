@@ -48,5 +48,10 @@ class SettingsLocalDataSource(
             preferences[IS_DARK_THEME_KEY] ?: false
         }
 
+    suspend fun setDarkThemeEnabled(enabled: Boolean) {
+        context.settingsDataStore.edit { preferences ->
+            preferences[IS_DARK_THEME_KEY] = enabled
+        }
+    }
 
 }
