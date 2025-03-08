@@ -40,4 +40,13 @@ class SettingsLocalDataSource(
             preferences[USE_DYNAMIC_COLOURS_KEY] = enabled
         }
     }
+
+    // Ключ для настройки "тёмная тема"
+    private val IS_DARK_THEME_KEY = booleanPreferencesKey("is_dark_theme")
+    val isDarkThemeFlow: Flow<Boolean> = context.settingsDataStore.data
+        .map { preferences ->
+            preferences[IS_DARK_THEME_KEY] ?: false
+        }
+
+
 }
