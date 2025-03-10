@@ -8,11 +8,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.tenshi18.imeiimsidecoder.data.local.SettingsLocalDataSource
-import com.tenshi18.imeiimsidecoder.data.repository.SettingsRepositoryImpl
-import com.tenshi18.imeiimsidecoder.presentation.theme.IMEIIMSIDecoderTheme
-import com.tenshi18.imeiimsidecoder.presentation.components.NavigationController
-import com.tenshi18.imeiimsidecoder.presentation.settings.SettingsViewModel
-import com.tenshi18.imeiimsidecoder.presentation.theme.ThemeMode
+import com.tenshi18.imeiimsidecoder.settings.data.repository.SettingsRepositoryImpl
+import com.tenshi18.imeiimsidecoder.ui.theme.IMEIIMSIDecoderTheme
+import com.tenshi18.imeiimsidecoder.ui.components.NavigationController
+import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
+import com.tenshi18.imeiimsidecoder.ui.theme.ThemeMode
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
