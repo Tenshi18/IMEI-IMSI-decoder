@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.tenshi18.imeiimsidecoder.presentation.theme.ThemeMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -41,17 +43,17 @@ class SettingsLocalDataSource(
         }
     }
 
-    // Ключ для настройки "тёмная тема"
-    private val IS_DARK_THEME_KEY = booleanPreferencesKey("is_dark_theme")
-    val isDarkThemeFlow: Flow<Boolean> = context.settingsDataStore.data
+    // Ключ для системной/тёмной/светлой темы
+    private val THEME_MODE_KEY = stringPreferencesKey("theme_mode")
+    val themeModeFlow: Flow<ThemeMode> = context.settingsDataStore.data
         .map { preferences ->
-            preferences[IS_DARK_THEME_KEY] ?: false
+            val modeString = preferences[THEME_MODE_KEY] ?: ThemeMode.SYSTEM.name
+            runCatching { ThemeMode.valueOf(modeString) }.getOrDefault(ThemeMode.SYSTEM)
         }
 
-    suspend fun setDarkThemeEnabled(enabled: Boolean) {
-        context.settingsDataStore.edit { preferences ->
-            preferences[IS_DARK_THEME_KEY] = enabled
+    suspend fun setThemeMode(mode: ThemeMode) {
+        context.settingsDataStore.edit { prefs ->
+            prefs[THEME_MODE_KEY] = mode.name
         }
     }
-
 }

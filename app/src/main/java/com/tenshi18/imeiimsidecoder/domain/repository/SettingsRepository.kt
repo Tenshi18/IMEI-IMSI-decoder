@@ -1,5 +1,6 @@
 package com.tenshi18.imeiimsidecoder.domain.repository
 
+import com.tenshi18.imeiimsidecoder.presentation.theme.ThemeMode
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
@@ -7,7 +8,7 @@ interface SettingsRepository {
     val useDynamicColoursFlow: Flow<Boolean>
     suspend fun setDynamicColoursEnabled(enabled: Boolean)
 
-    // Тёмная тема
-    val isDarkThemeFlow: Flow<Boolean>
-    suspend fun setDarkThemeEnabled(enabled: Boolean)
+    // Системная/тёмная/светлая тема
+    val themeModeFlow: Flow<ThemeMode>
+    suspend fun setThemeMode(mode: ThemeMode)
 }

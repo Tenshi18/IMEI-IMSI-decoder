@@ -12,6 +12,7 @@ import com.tenshi18.imeiimsidecoder.data.repository.SettingsRepositoryImpl
 import com.tenshi18.imeiimsidecoder.presentation.theme.IMEIIMSIDecoderTheme
 import com.tenshi18.imeiimsidecoder.presentation.components.NavigationController
 import com.tenshi18.imeiimsidecoder.presentation.settings.SettingsViewModel
+import com.tenshi18.imeiimsidecoder.presentation.theme.ThemeMode
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +37,9 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val useDynamicColours = settingsViewModel.useDynamicColoursFlow.collectAsState(initial = true).value
-            val isDarkTheme = settingsViewModel.isDarkThemeFlow.collectAsState(initial = false).value
+            val themeMode = settingsViewModel.themeModeFlow.collectAsState(initial = ThemeMode.SYSTEM).value
 
-            IMEIIMSIDecoderTheme (useDynamicColours = useDynamicColours, isDarkTheme = isDarkTheme) {
+            IMEIIMSIDecoderTheme (useDynamicColours = useDynamicColours, themeMode = themeMode) {
                 NavigationController(settingsViewModel)
             }
         }
