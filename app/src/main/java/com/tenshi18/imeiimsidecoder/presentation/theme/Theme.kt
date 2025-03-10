@@ -255,10 +255,10 @@ val unspecified_scheme = ColorFamily(
 @Composable
 fun IMEIIMSIDecoderTheme(
     useDynamicColours: Boolean,
+    isDarkTheme: Boolean,
     content: @Composable () -> Unit
 ) {
     val context = LocalContext.current
-    val isDarkTheme = isSystemInDarkTheme()
 
     val colorScheme = when {
         useDynamicColours && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isDarkTheme -> {

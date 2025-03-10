@@ -11,18 +11,31 @@ class SettingsViewModel(
     private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
-    // Подписываемся на Flow<Boolean> из репозитория и превращаем в StateFlow, чтобы удобно использовать в Compose
+    // Динамические цвета MD3
     val useDynamicColoursFlow = settingsRepository.useDynamicColoursFlow
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = true // пока не загрузились реальные данные
+            initialValue = true
         )
 
-    // Метод для обновления настройки
     fun setDynamicColoursEnabled(enabled: Boolean) {
         viewModelScope.launch {
             settingsRepository.setDynamicColoursEnabled(enabled)
+        }
+    }
+
+    // Тёмная тема
+    val isDarkThemeFlow = settingsRepository.isDarkThemeFlow
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false // пока не загрузились реальные данные
+        )
+
+    fun setDarkThemeEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            settingsRepository.setDarkThemeEnabled(enabled)
         }
     }
 }

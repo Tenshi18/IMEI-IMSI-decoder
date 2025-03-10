@@ -34,10 +34,12 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            IMEIIMSIDecoderTheme (useDynamicColours = settingsViewModel.useDynamicColoursFlow.collectAsState(initial = true).value) {
 
+            val useDynamicColours = settingsViewModel.useDynamicColoursFlow.collectAsState(initial = true).value
+            val isDarkTheme = settingsViewModel.isDarkThemeFlow.collectAsState(initial = false).value
+
+            IMEIIMSIDecoderTheme (useDynamicColours = useDynamicColours, isDarkTheme = isDarkTheme) {
                 NavigationController(settingsViewModel)
-
             }
         }
     }

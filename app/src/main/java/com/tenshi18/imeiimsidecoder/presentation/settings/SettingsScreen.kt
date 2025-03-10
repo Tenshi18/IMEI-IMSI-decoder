@@ -18,15 +18,26 @@ fun SettingsScreen(settingsViewModel : SettingsViewModel) {
 
     // Подписываемся на StateFlow из ViewModel
     val useDynamicColours by settingsViewModel.useDynamicColoursFlow.collectAsState()
+    val isDarkTheme by settingsViewModel.isDarkThemeFlow.collectAsState()
 
     Column {
 
+        // Динамические цвета MD3
         SwitchPreference(
             modifier = Modifier.fillMaxWidth(),
             title = { Text("Динамическая тема (Material You)") },
             description = "Использовать цвета обоев",
             checked = useDynamicColours,
             onCheckedChange = { settingsViewModel.setDynamicColoursEnabled(it) }
+        )
+
+        // Тёмная тема (ручной переключатель)
+        SwitchPreference(
+            modifier = Modifier.fillMaxWidth(),
+            title = { Text("Темная тема") },
+            description = "Использовать темную тему",
+            checked = isDarkTheme,
+            onCheckedChange = { settingsViewModel.setDarkThemeEnabled(it) }
         )
 
     }
@@ -40,8 +51,15 @@ class DummySettingsRepository : SettingsRepository {
     override suspend fun setDynamicColoursEnabled(enabled: Boolean) {
         _useDynamicColours.value = enabled
     }
+
+    private val _isDarkTheme = MutableStateFlow(false)
+    override val isDarkThemeFlow: StateFlow<Boolean> = _isDarkTheme
+    override suspend fun setDarkThemeEnabled(enabled: Boolean) {
+        _isDarkTheme.value = enabled
+    }
 }
 
+// Предпросмотр
 @Preview(showBackground = true)
 @Composable
 fun PreviewSettingsScreen() {
@@ -49,7 +67,7 @@ fun PreviewSettingsScreen() {
 
     val dummyViewModel = SettingsViewModel(dummyRepo)
 
-    IMEIIMSIDecoderTheme(useDynamicColours = false) {
+    IMEIIMSIDecoderTheme(useDynamicColours = false, isDarkTheme = false) {
         SettingsScreen(settingsViewModel = dummyViewModel)
     }
 }

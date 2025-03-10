@@ -13,10 +13,20 @@ class SettingsRepositoryImpl(
     private val localDataSource: SettingsLocalDataSource
 ) : SettingsRepository {
 
+    // Динамические цвета MD3
     override val useDynamicColoursFlow: Flow<Boolean>
         get() = localDataSource.useDynamicColoursFlow
 
     override suspend fun setDynamicColoursEnabled(enabled: Boolean) {
         localDataSource.setDynamicColoursEnabled(enabled)
+    }
+
+
+    // Тёмная тема
+    override val isDarkThemeFlow: Flow<Boolean>
+        get() = localDataSource.isDarkThemeFlow
+
+    override suspend fun setDarkThemeEnabled(enabled: Boolean) {
+        localDataSource.setDarkThemeEnabled(enabled)
     }
 }
