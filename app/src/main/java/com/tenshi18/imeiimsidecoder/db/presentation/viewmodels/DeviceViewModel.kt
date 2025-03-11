@@ -1,37 +1,46 @@
 package com.tenshi18.imeiimsidecoder.db.presentation.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tenshi18.imeiimsidecoder.db.data.local.DatabaseProviderTac
-import com.tenshi18.imeiimsidecoder.db.data.local.Tac
+import com.tenshi18.imeiimsidecoder.db.data.local.MCCMNC
+import com.tenshi18.imeiimsidecoder.db.data.local.TAC
+import com.tenshi18.imeiimsidecoder.db.domain.repository.DeviceRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.State
 
-class DeviceViewModel(application: Application) : AndroidViewModel(application) {
+class DeviceViewModel(
+    private val deviceRepository: DeviceRepository
+) : ViewModel() {
 
-    // Получаем DAO из предзагруженной базы TAC
-    private val tacDao = DatabaseProviderTac.getDatabase(application).tacDao()
+    // Храним результат декодирования IMEI
+    private val _imeiResult = MutableStateFlow<TAC?>(null)
+    val imeiResult: StateFlow<TAC?> = _imeiResult
 
-    // Состояние: список всех записей TAC
-    private val _tacList = mutableStateOf<List<Tac>>(emptyList())
-    val tacList: State<List<Tac>> = _tacList
+    // Храним результат декодирования IMSI
+    private val _imsiResult = MutableStateFlow<MCCMNC?>(null)
+    val imsiResult: StateFlow<MCCMNC?> = _imsiResult
 
-    init {
-        loadTacs()
-    }
-
-    private fun loadTacs() {
+    fun decodeIMEI(imei: String) {
         viewModelScope.launch {
-            _tacList.value = tacDao.getAllTacs()
+            // Извлекаем первые 8 цифр IMEI → TAC
+            val tacString = imei.take(8)
+            val tacInt = tacString.toIntOrNull() ?: return@launch
+            val result = deviceRepository.getTAC(tacInt)
+            _imeiResult.value = result
         }
     }
 
-    // Функция поиска записи по TAC
-    fun getTacById(tac: Int, onResult: (Tac?) -> Unit) {
+    fun decodeIMSI(imsi: String) {
         viewModelScope.launch {
-            onResult(tacDao.getTac(tac))
+            // MCC обычно 3 цифры, MNC 2 или 3, в простом случае assume MNC = 2
+            // (сделать логику) TODO !!!
+            val mccString = imsi.take(3)
+            val mncString = imsi.drop(3).take(2) // assume 2
+            val mccInt = mccString.toIntOrNull() ?: return@launch
+            val mncInt = mncString.toIntOrNull() ?: return@launch
+            val result = deviceRepository.getMCCMNC(mccInt, mncInt)
+            _imsiResult.value = result
         }
     }
 }
