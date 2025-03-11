@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "mcc_mnc_table")
-data class MccMnc(
+data class MCCMNC(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val mcc: Int,
     val mnc: Int,

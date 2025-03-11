@@ -6,13 +6,13 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface TacDao {
+interface TACDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTac(tac: Tac)
+    suspend fun insertTAC(tac: TAC)
 
-    @Query("SELECT * FROM tac_table WHERE tac = :tac")
-    suspend fun getTac(tac: Int): Tac?
+    @Query("SELECT * FROM tac_table WHERE tac = :tac LIMIT 1")
+    suspend fun getTAC(tac: Int): TAC?
 
     @Query("SELECT * FROM tac_table")
-    suspend fun getAllTacs(): List<Tac>
+    suspend fun getAllTACs(): List<TAC>
 }

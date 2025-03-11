@@ -6,10 +6,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface MccMncDao {
+interface MCCMNCDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMccMnc(mccMnc: MccMnc)
+    suspend fun insertMccMnc(MCCMNC: MCCMNC)
 
-    @Query("SELECT * FROM mcc_mnc_table WHERE mcc = :mcc AND mnc = :mnc")
-    suspend fun getMccMnc(mcc: Int, mnc: Int): MccMnc?
+    @Query("SELECT * FROM mcc_mnc_table WHERE mcc = :mcc AND mnc = :mnc LIMIT 1")
+    suspend fun getMCCMNC(mcc: Int, mnc: Int): MCCMNC?
 }

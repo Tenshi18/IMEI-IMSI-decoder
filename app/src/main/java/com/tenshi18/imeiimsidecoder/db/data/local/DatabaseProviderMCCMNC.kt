@@ -2,16 +2,17 @@ package com.tenshi18.imeiimsidecoder.db.data.local
 
 import android.content.Context
 import androidx.room.Room
+import kotlin.jvm.java
 
-object DatabaseProviderMccMnc {
+object DatabaseProviderMCCMNC {
     @Volatile
-    private var INSTANCE: MccMncDatabase? = null
+    private var INSTANCE: MCCMNCDatabase? = null
 
-    fun getDatabase(context: Context): MccMncDatabase {
+    fun getDatabase(context: Context): MCCMNCDatabase {
         return INSTANCE ?: synchronized(this) {
             val instance = Room.databaseBuilder(
                 context.applicationContext,
-                MccMncDatabase::class.java,
+                MCCMNCDatabase::class.java,
                 "mcc_mnc.sqlite3" // имя базы в internal storage
             )
                 .createFromAsset("mcc_mnc.sqlite3") // имя файла в assets
