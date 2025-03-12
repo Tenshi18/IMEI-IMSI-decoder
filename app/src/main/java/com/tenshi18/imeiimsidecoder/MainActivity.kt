@@ -7,7 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.tenshi18.imeiimsidecoder.data.local.SettingsLocalDataSource
+import com.tenshi18.imeiimsidecoder.settings.data.local.SettingsLocalDataSource
+import com.tenshi18.imeiimsidecoder.db.data.local.DatabaseProviderMCCMNC
+import com.tenshi18.imeiimsidecoder.db.data.local.DatabaseProviderTac
+import com.tenshi18.imeiimsidecoder.db.data.repository.DeviceRepositoryImpl
+import com.tenshi18.imeiimsidecoder.db.presentation.viewmodels.DeviceViewModel
 import com.tenshi18.imeiimsidecoder.settings.data.repository.SettingsRepositoryImpl
 import com.tenshi18.imeiimsidecoder.ui.theme.IMEIIMSIDecoderTheme
 import com.tenshi18.imeiimsidecoder.ui.components.NavigationController
@@ -18,10 +22,27 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val tacDao = DatabaseProviderTac.getDatabase(applicationContext).tacDao()
+        val mccMncDao = DatabaseProviderMCCMNC.getDatabase(applicationContext).mccMncDao()
+        val deviceRepository = DeviceRepositoryImpl(tacDao, mccMncDao)
+
+        val deviceFactory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(DeviceViewModel::class.java)) {
+                    @Suppress("UNCHECKED_CAST")
+                    return DeviceViewModel(deviceRepository) as T
+                }
+                throw IllegalArgumentException("Unknown ViewModel class")
+            }
+        }
+
+        val deviceViewModel = ViewModelProvider(this, deviceFactory)[DeviceViewModel::class.java]
+
+
         val localDataSource = SettingsLocalDataSource(applicationContext)
         val settingsRepository = SettingsRepositoryImpl(localDataSource)
 
-        val factory = object : ViewModelProvider.Factory {
+        val settingsFactory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
                     @Suppress("UNCHECKED_CAST")
@@ -31,7 +52,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        val settingsViewModel = ViewModelProvider(this, factory)[SettingsViewModel::class.java]
+        val settingsViewModel = ViewModelProvider(this, settingsFactory)[SettingsViewModel::class.java]
 
         enableEdgeToEdge()
         setContent {
@@ -40,7 +61,7 @@ class MainActivity : ComponentActivity() {
             val themeMode = settingsViewModel.themeModeFlow.collectAsState(initial = ThemeMode.SYSTEM).value
 
             IMEIIMSIDecoderTheme (useDynamicColours = useDynamicColours, themeMode = themeMode) {
-                NavigationController(settingsViewModel)
+                NavigationController(deviceViewModel, settingsViewModel)
             }
         }
     }

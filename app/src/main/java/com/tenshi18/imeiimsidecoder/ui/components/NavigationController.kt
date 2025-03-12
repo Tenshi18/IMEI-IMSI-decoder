@@ -31,6 +31,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.tenshi18.imeiimsidecoder.db.presentation.viewmodels.DeviceViewModel
 import com.tenshi18.imeiimsidecoder.ui.screens.HistoryScreen
 import com.tenshi18.imeiimsidecoder.ui.screens.IMEIScreen
 import com.tenshi18.imeiimsidecoder.ui.screens.IMSIScreen
@@ -41,7 +42,7 @@ data class NavItem(val label: String, val icon: ImageVector)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationController(settingsViewModel: SettingsViewModel) {
+fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: SettingsViewModel) {
     val navController: NavHostController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
@@ -133,8 +134,8 @@ fun NavigationController(settingsViewModel: SettingsViewModel) {
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             NavHost(navController = navController, startDestination = "IMEI") {
-                composable("IMEI") { IMEIScreen() }
-                composable("IMSI") { IMSIScreen() }
+                composable("IMEI") { IMEIScreen(deviceViewModel) }
+                composable("IMSI") { IMSIScreen(deviceViewModel) }
                 composable("History") { HistoryScreen() }
                 composable("Settings") { SettingsScreen(settingsViewModel) }
             }
