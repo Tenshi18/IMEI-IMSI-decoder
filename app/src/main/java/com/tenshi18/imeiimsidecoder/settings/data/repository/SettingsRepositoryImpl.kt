@@ -1,6 +1,6 @@
 package com.tenshi18.imeiimsidecoder.settings.data.repository
 
-import com.tenshi18.imeiimsidecoder.data.local.SettingsLocalDataSource
+import com.tenshi18.imeiimsidecoder.settings.data.local.SettingsLocalDataSource
 import com.tenshi18.imeiimsidecoder.settings.domain.repository.SettingsRepository
 import com.tenshi18.imeiimsidecoder.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.Flow

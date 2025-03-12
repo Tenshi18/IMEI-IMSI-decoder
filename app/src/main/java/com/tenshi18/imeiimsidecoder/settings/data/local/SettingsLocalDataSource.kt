@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.data.local
+package com.tenshi18.imeiimsidecoder.settings.data.local
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
