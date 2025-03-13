@@ -1,7 +1,11 @@
 package com.tenshi18.imeiimsidecoder.ui.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
@@ -14,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,7 +31,13 @@ fun IMSIScreen(deviceViewModel: DeviceViewModel) {
     val imsiResult by deviceViewModel.imsiResult.collectAsState()
     var imsiInput by remember { mutableStateOf("") }
 
-    Column(Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text("Введите IMSI")
         OutlinedTextField(
             value = imsiInput,
@@ -39,19 +50,28 @@ fun IMSIScreen(deviceViewModel: DeviceViewModel) {
         }) {
             Text("Декодировать")
         }
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(32.dp))
+
+        // Блок результатов
         imsiResult?.let { result ->
-            Text("MCC: ${result.mcc}")
-            Text("MNC: ${result.mnc}")
-            Text("Оператор: ${result.operator}")
-            Text("Страна: ${result.country}")
-            Text("Регион: ${result.region}")
-            Text("ISO: ${result.iso}")
-            Text("Бренд: ${result.brand}")
-            Text("Частоты: ${result.bands}")
+            Column(
+                modifier = Modifier.fillMaxWidth(), // Растягиваем колонку на всю ширину
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalAlignment = Alignment.Start // Выравниваем содержимое влево
+            ) {
+                Text("MCC: ${result.mcc}")
+                Text("MNC: ${result.mnc}")
+                Text("Оператор: ${result.operator}")
+                Text("Страна: ${result.country}")
+                Text("Регион: ${result.region}")
+                Text("ISO: ${result.iso}")
+                Text("Бренд: ${result.brand}")
+                Text("Частоты: ${result.bands}")
+            }
         }
     }
 }
+
 
 //// Предпросмотр
 //@Preview(showBackground = true)
