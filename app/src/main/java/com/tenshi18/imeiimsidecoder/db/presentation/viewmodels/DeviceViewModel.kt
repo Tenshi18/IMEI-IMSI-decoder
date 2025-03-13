@@ -33,10 +33,10 @@ class DeviceViewModel(
 
     fun decodeIMSI(imsi: String) {
         viewModelScope.launch {
-            // MCC обычно 3 цифры, MNC 2 или 3, в простом случае assume MNC = 2
+            // MCC обычно 3 цифры, MNC 2 или 3, в простом случае примем, что MNC = 2
             // (сделать логику) TODO !!!
             val mccString = imsi.take(3)
-            val mncString = imsi.drop(3).take(2) // assume 2
+            val mncString = imsi.drop(3).take(2) // примем, что MNC = 2
             val mccInt = mccString.toIntOrNull() ?: return@launch
             val mncInt = mncString.toIntOrNull() ?: return@launch
             val result = deviceRepository.getMCCMNC(mccInt, mncInt)

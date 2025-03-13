@@ -16,6 +16,7 @@ object DatabaseProviderMCCMNC {
                 "mcc_mnc.sqlite3" // имя базы в internal storage
             )
                 .createFromAsset("mcc_mnc.sqlite3") // имя файла в assets
+                .fallbackToDestructiveMigration()
                 .build()
             INSTANCE = instance
             instance

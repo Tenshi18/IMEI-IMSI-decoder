@@ -10,6 +10,6 @@ interface MCCMNCDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMccMnc(MCCMNC: MCCMNC)
 
-    @Query("SELECT * FROM mcc_mnc_table WHERE mcc = :mcc AND mnc = :mnc LIMIT 1")
+    @Query("SELECT * FROM mcc_mnc WHERE mcc = :mcc AND mnc = :mnc LIMIT 1")
     suspend fun getMCCMNC(mcc: Int, mnc: Int): MCCMNC?
 }
