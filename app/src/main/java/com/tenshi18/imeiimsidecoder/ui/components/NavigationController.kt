@@ -1,6 +1,9 @@
 package com.tenshi18.imeiimsidecoder.ui.components
 
+import android.net.http.SslCertificate.restoreState
+import android.net.http.SslCertificate.saveState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -68,32 +71,32 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(screenTitle) },
-                actions = {
-                    if (currentRoute != "Settings") {
-                        IconButton(onClick = {
-                            navController.navigate("Settings") {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
+            if (currentRoute != "Settings") {
+                TopAppBar(
+                    title = { Text(screenTitle) },
+                    actions = {
+                            IconButton(onClick = {
+                                navController.navigate("Settings") {
+                                    popUpTo(navController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
-                                launchSingleTop = true
-                                restoreState = true
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Settings,
+                                    contentDescription = "Settings",
+                                    tint = MaterialTheme.colorScheme.onPrimary
+                                )
                             }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Filled.Settings,
-                                contentDescription = "Settings",
-                                tint = MaterialTheme.colorScheme.onPrimary
-                            )
-                        }
-                    }
-                },
-                // Цвета
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    },
+                    // Цвета
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
                 )
-            )
+            }
         },
         bottomBar = {
 
@@ -132,12 +135,12 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
             }
         }
     ) { paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues)) {
+        Box(modifier = Modifier) {
             NavHost(navController = navController, startDestination = "IMEI") {
-                composable("IMEI") { IMEIScreen(deviceViewModel) }
-                composable("IMSI") { IMSIScreen(deviceViewModel) }
-                composable("History") { HistoryScreen() }
-                composable("Settings") { SettingsScreen(settingsViewModel) }
+                composable("IMEI") { Column(modifier = Modifier.padding(paddingValues)) { IMEIScreen(deviceViewModel) } }
+                composable("IMSI") { Column(modifier = Modifier.padding(paddingValues)) { IMSIScreen(deviceViewModel) } }
+                composable("History") { Column(modifier = Modifier.padding(paddingValues)) { HistoryScreen() } }
+                composable("Settings") { SettingsScreen(settingsViewModel, navController) }
             }
         }
     }
