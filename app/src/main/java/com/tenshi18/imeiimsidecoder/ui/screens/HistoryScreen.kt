@@ -10,6 +10,6 @@ import androidx.compose.ui.Modifier
 @Composable
 fun HistoryScreen() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "History Screen")
+        Text(text = "Экран истории (ещё не реализовано)")
     }
 }
