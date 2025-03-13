@@ -10,9 +10,9 @@ interface TACDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTAC(tac: TAC)
 
-    @Query("SELECT * FROM tac_table WHERE tac = :tac LIMIT 1")
+    @Query("SELECT * FROM tac WHERE tac = :tac LIMIT 1")
     suspend fun getTAC(tac: Int): TAC?
 
-    @Query("SELECT * FROM tac_table")
+    @Query("SELECT * FROM tac")
     suspend fun getAllTACs(): List<TAC>
 }
