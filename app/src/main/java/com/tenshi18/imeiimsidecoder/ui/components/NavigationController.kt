@@ -15,8 +15,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeviceUnknown
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SimCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -62,7 +62,7 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
 
     // Три пункта нижней навигации
     val navItems = listOf(
-        NavItem("IMEI", Icons.Filled.Phone),
+        NavItem("IMEI", Icons.Filled.DeviceUnknown),
         NavItem("IMSI", Icons.Filled.SimCard),
         NavItem("History", Icons.Filled.History)
     )
