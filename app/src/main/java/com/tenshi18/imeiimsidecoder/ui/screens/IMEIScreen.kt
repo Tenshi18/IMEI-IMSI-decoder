@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -29,8 +30,8 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel) {
     var imeiInput by remember { mutableStateOf("") }
 
     Column(Modifier.padding(16.dp)) {
-        Text("Введите IMEI (15 цифр)")
-        TextField(
+        Text("Введите IMEI")
+        OutlinedTextField(
             value = imeiInput,
             onValueChange = { if (it.length <= 15 && it.all { char -> char.isDigit() }) imeiInput = it },
             label = { Text("IMEI") }
@@ -43,7 +44,6 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel) {
         }
         Spacer(Modifier.height(16.dp))
         imeiResult?.let { result ->
-            Text("Результат")
             Text("Бренд: ${result.brand}")
             Text("Модель: ${result.model}")
             Text("AKA: ${result.aka}")

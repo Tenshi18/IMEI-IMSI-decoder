@@ -41,7 +41,6 @@ fun IMSIScreen(deviceViewModel: DeviceViewModel) {
         }
         Spacer(Modifier.height(16.dp))
         imsiResult?.let { result ->
-            Text("Результат")
             Text("MCC: ${result.mcc}")
             Text("MNC: ${result.mnc}")
             Text("Оператор: ${result.operator}")
