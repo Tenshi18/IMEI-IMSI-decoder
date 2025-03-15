@@ -1,2 +1,47 @@
 package com.tenshi18.imeiimsidecoder.history.data.local
 
+import android.content.Context
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.tenshi18.imeiimsidecoder.history.domain.model.HistoryItem
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.Types
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+
+private val HISTORY_JSON_KEY = stringPreferencesKey("history_json")
+
+private const val HISTORY_DATASTORE_NAME = "history_datastore"
+
+val Context.historyDataStore by preferencesDataStore(HISTORY_DATASTORE_NAME)
+
+class HistoryLocalDataSource(
+    private val context: Context,
+    moshi: Moshi
+) {
+
+    private val listType = Types.newParameterizedType(List::class.java, HistoryItem::class.java)
+    private val listAdapter = moshi.adapter<List<HistoryItem>>(listType)
+
+    val historyFlow: Flow<List<HistoryItem>> = context.historyDataStore.data.map { preferences ->
+        val json = preferences[HISTORY_JSON_KEY] ?: "[]"
+        listAdapter.fromJson(json) ?: emptyList()
+    }
+
+    suspend fun addHistoryItem(item: HistoryItem) {
+        context.historyDataStore.edit { preferences ->
+            val oldJson = preferences[HISTORY_JSON_KEY] ?: "[]"
+            val oldList = listAdapter.fromJson(oldJson) ?: emptyList()
+            val newList = oldList + item
+            preferences[HISTORY_JSON_KEY] = listAdapter.toJson(newList)
+        }
+    }
+
+    suspend fun clearHistory() {
+        context.historyDataStore.edit { preferences ->
+            preferences[HISTORY_JSON_KEY] = "[]"
+        }
+    }
+}
