@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.history
+package com.tenshi18.imeiimsidecoder.history.domain.model
 
 data class HistoryItem(
     val type: String,
