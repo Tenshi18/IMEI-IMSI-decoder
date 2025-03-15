@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.tools.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -93,4 +94,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     ksp(libs.androidx.room.compiler)
+
+    implementation(libs.moshi)
 }
