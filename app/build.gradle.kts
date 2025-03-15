@@ -1,3 +1,4 @@
+import com.android.tools.r8.internal.ks
 import org.gradle.kotlin.dsl.annotationProcessor
 
 plugins {
@@ -89,11 +90,13 @@ dependencies {
     // Preferences DataStore для сохранения настроек
     implementation(libs.datastore.preferences)
 
+    // Room для работы с БД
     implementation(libs.androidx.room.runtime)
-
     implementation(libs.androidx.room.ktx)
-
     ksp(libs.androidx.room.compiler)
-
+    
+    // moshi для работы с json (история)
     implementation(libs.moshi)
+    implementation(libs.moshi.kotlin)
+    ksp(libs.moshi.kotlin.codegen)
 }
