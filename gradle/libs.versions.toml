@@ -23,7 +23,6 @@ materialIconsExtended = "1.7.8"
 roomCommon = "2.6.1"
 roomKtx = "2.6.1"
 ksp = "2.1.10-1.0.31"
-room = "2.6.1"
 toolsCore = "1.0.0-alpha12"
 
 [libraries]
@@ -40,8 +39,6 @@ androidx-material3-window-size-class1 = { module = "androidx.compose.material3:m
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version = "2.6.1" }
 androidx-room-room-compiler = { module = "androidx.room:room-compiler" }
-androidx-room-room-compiler2 = { module = "androidx.room:room-compiler" }
-androidx-room-room-compiler3 = { module = "androidx.room:room-compiler" }
 androidx-room-room-runtime = { module = "androidx.room:room-runtime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version = "2.6.1" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -61,6 +58,8 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3WindowSizeClass" }
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version = "1.15.2" }
+moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version = "1.15.2" }
 room-compiler = { module = "androidx.room:room-compiler" }
 room-runtime = { module = "androidx.room:room-runtime" }
 sqlite-jdbc = { module = "org.xerial:sqlite-jdbc", version.ref = "sqliteJdbc" }
