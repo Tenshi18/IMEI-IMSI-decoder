@@ -32,16 +32,17 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel) {
     val imeiResult by deviceViewModel.imeiResult.collectAsState()
     var imeiInput by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text("Введите IMEI")
         OutlinedTextField(
             value = imeiInput,
-            onValueChange = { if (it.length <= 15 && it.all { char -> char.isDigit() }) imeiInput = it },
+            onValueChange = { imeiInput = it },
             label = { Text("IMEI") }
         )
         Spacer(Modifier.height(8.dp))
