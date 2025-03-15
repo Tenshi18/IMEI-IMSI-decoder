@@ -24,7 +24,7 @@
 ## Сборка из исходного кода
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/yourusername/imei-imsi-decoder.git
+   git clone https://github.com/Tenshi18/IMEI-IMSI-decoder.git
    ```
 2. Откройте проект в Android Studio.
 3. Синхронизируйте проект, соберите AAB/APK с помощью "Build" -> "Generate app bundles or APKs".
