@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.DeviceUnknown
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SimCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -48,6 +52,8 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
     val navController: NavHostController = rememberNavController()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentBackStackEntry?.destination?.route
+
+    val historyList by historyViewModel.historyFlow.collectAsState()
 
     val showBottomBar = (currentRoute != "Settings")
 
@@ -97,19 +103,6 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
                 )
             }
         },
-//        topBar = {
-//            TopAppBar(
-//                title = { Text(screenTitle) },
-//                // Если хотите кнопку "назад" на некоторых экранах:
-//                navigationIcon = if (currentRoute == "Settings") {
-//                    {
-//                        IconButton(onClick = { navController.popBackStack() }) {
-//                            Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-//                        }
-//                    }
-//                } else null
-//            )
-//        },
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
@@ -144,7 +137,23 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
                     }
                 }
             }
-        }
+        },
+
+        // FAB для очистки истории
+        floatingActionButton = {
+            if (currentRoute == "History" && historyList.isNotEmpty()) {
+                FloatingActionButton(
+                    onClick = { historyViewModel.clearHistory() },
+                    containerColor = MaterialTheme.colorScheme.primary
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.DeleteForever,
+                        contentDescription = "Очистить историю"
+                    )
+                }
+            }
+        },
+        floatingActionButtonPosition = FabPosition.End
     ) { paddingValues ->
         Box(modifier = Modifier) {
             NavHost(navController = navController, startDestination = "IMEI") {
