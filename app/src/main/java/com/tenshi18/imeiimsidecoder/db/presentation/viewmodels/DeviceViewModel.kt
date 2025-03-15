@@ -5,12 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.tenshi18.imeiimsidecoder.db.data.local.MCCMNC
 import com.tenshi18.imeiimsidecoder.db.data.local.TAC
 import com.tenshi18.imeiimsidecoder.db.domain.repository.DeviceRepository
+import com.tenshi18.imeiimsidecoder.history.domain.model.HistoryItem
+import com.tenshi18.imeiimsidecoder.history.domain.repository.HistoryRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class DeviceViewModel(
-    private val deviceRepository: DeviceRepository
+    private val deviceRepository: DeviceRepository,
+    private val historyRepository: HistoryRepository
 ) : ViewModel() {
 
     // Храним результат декодирования IMEI
@@ -23,11 +26,21 @@ class DeviceViewModel(
 
     fun decodeIMEI(imei: String) {
         viewModelScope.launch {
-            // Извлекаем первые 8 цифр IMEI → TAC
+            // Извлекаем первые 8 цифр IMEI (TAC)
             val tacString = imei.take(8)
             val tacInt = tacString.toIntOrNull() ?: return@launch
             val result = deviceRepository.getTAC(tacInt)
             _imeiResult.value = result
+
+            // Сохраняем результат в историю (для отображения на HistoryScreen)
+            historyRepository.addHistoryItem(
+                HistoryItem(
+                    type = "IMEI",
+                    value = imei,
+                    decoded = result?.toString() ?: "Не удалось декодировать",
+                    timestamp = System.currentTimeMillis()
+                )
+            )
         }
     }
 
@@ -41,6 +54,16 @@ class DeviceViewModel(
             val mncInt = mncString.toIntOrNull() ?: return@launch
             val result = deviceRepository.getMCCMNC(mccInt, mncInt)
             _imsiResult.value = result
+
+            // Сохраняем результат в историю (для отображения на HistoryScreen)
+            historyRepository.addHistoryItem(
+                HistoryItem(
+                    type = "IMSI",
+                    value = imsi,
+                    decoded = result?.toString() ?: "Не удалось декодировать",
+                    timestamp = System.currentTimeMillis()
+                )
+            )
         }
     }
 }

@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,14 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tenshi18.imeiimsidecoder.db.presentation.viewmodels.DeviceViewModel
-import com.tenshi18.imeiimsidecoder.ui.theme.IMEIIMSIDecoderTheme
-import com.tenshi18.imeiimsidecoder.ui.theme.ThemeMode
-import com.tenshi18.imeiimsidecoder.db.data.local.TAC
-import com.tenshi18.imeiimsidecoder.db.data.local.MCCMNC
-import com.tenshi18.imeiimsidecoder.db.domain.repository.DeviceRepository
+
 @Composable
 fun IMEIScreen(deviceViewModel: DeviceViewModel) {
     val imeiResult by deviceViewModel.imeiResult.collectAsState()
@@ -62,47 +55,3 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel) {
     }
 
 }
-
-
-//// Предпросмотр
-//class DummyDeviceRepository : DeviceRepository {
-//    override suspend fun getTAC(tac: Int): TAC? {
-//        // Возвращаем реальные классы из db.data.local
-//        return TAC(
-//            tac = 12345678,
-//            brand = "Nokia",
-//            model = "3310",
-//            aka = "Legacy phone"
-//        )
-//    }
-//
-//    override suspend fun getMCCMNC(mcc: Int, mnc: Int): MCCMNC? {
-//        return MCCMNC(
-//            mcc = 250,
-//            mnc = 99,
-//            plmn = "25099",
-//            operator = "Beeline",
-//            country = "Russia",
-//            region = "Europe",
-//            iso = "RU",
-//            brand = "Beeline",
-//            bands = "GSM 900 / 1800",
-//            tadig = "",
-//        )
-//    }
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewIMEIScreen() {
-//    val dummyRepo = DummyDeviceRepository()
-//    val deviceViewModel = remember { DeviceViewModel(dummyRepo) }
-//
-//    LaunchedEffect(Unit) {
-//        deviceViewModel.decodeIMEI("123456789012345")
-//    }
-//
-//    IMEIIMSIDecoderTheme(themeMode = ThemeMode.LIGHT, useDynamicColours = false) {
-//        IMEIScreen(deviceViewModel)
-//    }
-//}
