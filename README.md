@@ -29,5 +29,6 @@
 2. Откройте проект в Android Studio.
 3. Синхронизируйте проект, соберите AAB/APK с помощью "Build" -> "Generate app bundles or APKs".
 
-## Автор
-Tenshi18
+## Источники БД
+- TAC (IMEI): http://tacdb.osmocom.org/
+- MCC/MNC (IMSI): https://mcc-mnc.net/
