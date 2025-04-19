@@ -16,7 +16,6 @@ object DatabaseProviderTac {
                 "tac.sqlite3"
             )
                 .createFromAsset("tac.sqlite3")
-                .fallbackToDestructiveMigration()
                 .build()
             INSTANCE = instance
             instance
