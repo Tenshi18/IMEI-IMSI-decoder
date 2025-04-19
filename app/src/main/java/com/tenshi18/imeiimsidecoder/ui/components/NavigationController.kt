@@ -2,13 +2,18 @@ package com.tenshi18.imeiimsidecoder.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.DeviceUnknown
 import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SimCard
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
@@ -20,16 +25,20 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -73,6 +82,7 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
     )
 
     var selectedItemIndex by rememberSaveable { mutableIntStateOf(0) }
+    var showHelpDialog by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -80,21 +90,28 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
                 TopAppBar(
                     title = { Text(screenTitle) },
                     actions = {
-                            IconButton(onClick = {
-                                navController.navigate("Settings") {
-                                    popUpTo(navController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
+                        IconButton(onClick = { showHelpDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Filled.Info,
+                                contentDescription = "Help",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
+                        IconButton(onClick = {
+                            navController.navigate("Settings") {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
                                 }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Settings,
-                                    contentDescription = "Settings",
-                                    tint = MaterialTheme.colorScheme.onPrimary
-                                )
+                                launchSingleTop = true
+                                restoreState = true
                             }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = "Settings",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
                     },
                     // Цвета
                     colors = TopAppBarDefaults.topAppBarColors(
@@ -163,6 +180,34 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
                 composable("Settings") { SettingsScreen(settingsViewModel, navController) }
             }
         }
+    }
+
+    if (showHelpDialog) {
+        AlertDialog(
+            onDismissRequest = { showHelpDialog = false },
+            title = { Text("Что такое IMEI и IMSI?") },
+            text = {
+                Box(
+                    modifier = Modifier
+                        .heightIn(max = 400.dp)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Text(
+                    "IMEI (International Mobile Equipment Identity) — уникальный идентификатор устройства.\n" +
+                        "IMSI (International Mobile Subscriber Identity) — уникальный идентификатор абонента в мобильной сети.\n\n" +
+                        "IMEI присваивается каждому устройству. Он включает в себя TAC (Type Allocation Code) — код, определяющий производителя и модель устройства — и уникальный номер устройства.\n\n" +
+                        "IMSI, в свою очередь, присваивается SIM-карте и используется для идентификации пользователя в сети мобильного оператора. Он включает в себя MCC (Mobile Country Code — код страны), MNC (Mobile Network Code — код оператора) и уникальный номер абонента.\n" +
+                        "IMEI позволяет однозначно идентифицировать устройство, а IMSI — абонента и его оператора.\n\n" +
+                        "MCC и MNC, определяющие страну и оператора мобильной связи, доступны приложениям без отдельного разрешения пользователя. Они могут быть использованы, например, для гео-блокировки или таргетирования контента.\n"
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showHelpDialog = false }) {
+                    Text("Закрыть")
+                }
+            }
+        )
     }
 
     // Слушаем изменение маршрута, чтобы обновлять selectedItemIndex
