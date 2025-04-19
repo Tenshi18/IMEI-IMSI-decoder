@@ -24,6 +24,11 @@
 ## Сборка из исходного кода
 1. Клонируйте репозиторий:
    ```bash
+   git clone https://codeberg.org/Tenshi18/IMEI-IMSI-decoder.git
+   ```
+   или
+   
+   ```bash
    git clone https://github.com/Tenshi18/IMEI-IMSI-decoder.git
    ```
 2. Откройте проект в Android Studio.
