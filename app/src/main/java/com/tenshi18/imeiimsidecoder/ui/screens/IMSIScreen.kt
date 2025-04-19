@@ -79,17 +79,17 @@ fun IMSIScreen(deviceViewModel: DeviceViewModel) {
             ) {
                 Text(
                     text = buildAnnotatedString {
-                        append("МТС (Россия): ")
+                        append("МТС: ")
                         withStyle(style = SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray.copy(alpha = 0.2f))) { append("250012345678901") }
                     },
                     modifier = Modifier.fillMaxWidth().clickable { imsiInput = "250012345678901" }
                 )
                 Text(
                     text = buildAnnotatedString {
-                        append("Sprint (США): ")
-                        withStyle(style = SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray.copy(alpha = 0.2f))) { append("310170845466094") }
+                        append("Мегафон: ")
+                        withStyle(style = SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray.copy(alpha = 0.2f))) { append("250023456789012") }
                     },
-                    modifier = Modifier.fillMaxWidth().clickable { imsiInput = "310170845466094" }
+                    modifier = Modifier.fillMaxWidth().clickable { imsiInput = "250023456789012" }
                 )
             }
             Spacer(Modifier.height(16.dp))
