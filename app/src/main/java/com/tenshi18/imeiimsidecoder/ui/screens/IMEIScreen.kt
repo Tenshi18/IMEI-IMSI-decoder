@@ -52,7 +52,7 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true
         )
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(8.dp))
         Button(onClick = {
             if (imeiInput.length != 15) {
                 Toast.makeText(context, "IMEI должен быть из 15 цифр", Toast.LENGTH_SHORT).show()
@@ -92,7 +92,7 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel) {
                 )
             }
             Spacer(Modifier.height(16.dp))
-            // Результаты
+            // Блок результатов
             imeiResult?.let { result ->
                 Column(
                     modifier = Modifier.fillMaxWidth(),
