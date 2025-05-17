@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +40,17 @@ fun SettingsScreen(
     val useDynamicColours by settingsViewModel.useDynamicColoursFlow.collectAsState()
     val themeMode by settingsViewModel.themeModeFlow.collectAsState()
 
-    var showDialog by remember { mutableStateOf(false) }
+    var showThemeDialog by remember { mutableStateOf(false) }
+
+    var showWarningDialog by remember { mutableStateOf(false) }
+
+
+    // Подписываемся на событие показа
+    LaunchedEffect(Unit) {
+        settingsViewModel.showAPIWarningEvent.collect {
+            showWarningDialog = true
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -64,7 +75,10 @@ fun SettingsScreen(
                     IMEIMode.API -> "Декодировать IMEI по API"
                 },
                 checked = currentIMEIMode == IMEIMode.LOCAL,
-                onCheckedChange = { settingsViewModel.setIMEIMode(if (it) IMEIMode.LOCAL else IMEIMode.API) }
+                onCheckedChange = { isLocal ->
+                    val newMode = if (isLocal) IMEIMode.LOCAL else IMEIMode.API
+                    settingsViewModel.setIMEIModeWithWarning(newMode)
+                }
             )
 
             PreferenceGroupTitle("Внешний вид")
@@ -86,18 +100,40 @@ fun SettingsScreen(
                     ThemeMode.DARK -> "Тёмная"
                     ThemeMode.LIGHT -> "Светлая"
                 },
-                onClick = { showDialog = true }
+                onClick = { showThemeDialog = true }
             )
         }
     }
 
-    // Если showDialog == true, показываем диалог выбора темы
-    if (showDialog) {
+    // Если showWarningDialog == true, показываем предупреждение при первом переключении в режим API
+    if (showWarningDialog) {
         AlertDialog(
-            onDismissRequest = { showDialog = false },
+            onDismissRequest = { showWarningDialog = false },
+            title = { Text("Внимание") },
+            text = { Text("В режиме декодирования IMEI по API приложение будет делать сетевые запросы к https://alpha.imeicheck.com/api/" +
+                    "Потребуется доступ к Интернету") },
+            confirmButton = {
+                TextButton(onClick = {
+                    settingsViewModel.setAPIWarningShown()
+                    settingsViewModel.setIMEIMode(IMEIMode.API)
+                    showWarningDialog = false
+                } )
+                { Text("Продолжить") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showWarningDialog = false }) {
+                    Text("Отмена")
+                }
+            })
+    }
+
+    // Если showThemeDialog == true, показываем диалог выбора темы
+    if (showThemeDialog) {
+        AlertDialog(
+            onDismissRequest = { showThemeDialog = false },
             confirmButton = { },
             dismissButton = {
-                TextButton(onClick = { showDialog = false }) {
+                TextButton(onClick = { showThemeDialog = false }) {
                     Text("Отмена")
                 }
             },
@@ -109,7 +145,7 @@ fun SettingsScreen(
                             selected = (themeMode == ThemeMode.SYSTEM),
                             onClick = {
                                 settingsViewModel.setThemeMode(ThemeMode.SYSTEM)
-                                showDialog = false
+                                showThemeDialog = false
                             }
                         )
                         Text(
@@ -118,7 +154,7 @@ fun SettingsScreen(
                                 .padding(start = 8.dp)
                                 .clickable {
                                     settingsViewModel.setThemeMode(ThemeMode.SYSTEM)
-                                    showDialog = false
+                                    showThemeDialog = false
                                 }
                         )
                     }
@@ -129,7 +165,7 @@ fun SettingsScreen(
                             selected = (themeMode == ThemeMode.DARK),
                             onClick = {
                                 settingsViewModel.setThemeMode(ThemeMode.DARK)
-                                showDialog = false
+                                showThemeDialog = false
                             }
                         )
                         Text(
@@ -138,7 +174,7 @@ fun SettingsScreen(
                                 .padding(start = 8.dp)
                                 .clickable {
                                     settingsViewModel.setThemeMode(ThemeMode.DARK)
-                                    showDialog = false
+                                    showThemeDialog = false
                                 }
                         )
                     }
@@ -149,7 +185,7 @@ fun SettingsScreen(
                             selected = (themeMode == ThemeMode.LIGHT),
                             onClick = {
                                 settingsViewModel.setThemeMode(ThemeMode.LIGHT)
-                                showDialog = false
+                                showThemeDialog = false
                             }
                         )
                         Text(
@@ -158,7 +194,7 @@ fun SettingsScreen(
                                 .padding(start = 8.dp)
                                 .clickable {
                                     settingsViewModel.setThemeMode(ThemeMode.LIGHT)
-                                    showDialog = false
+                                    showThemeDialog = false
                                 }
                         )
                     }

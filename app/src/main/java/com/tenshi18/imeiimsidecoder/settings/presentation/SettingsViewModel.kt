@@ -5,7 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
 import com.tenshi18.imeiimsidecoder.settings.domain.repository.SettingsRepository
 import com.tenshi18.imeiimsidecoder.ui.theme.ThemeMode
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -20,12 +23,38 @@ class SettingsViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = IMEIMode.LOCAL
         )
-
     fun setIMEIMode(mode: IMEIMode) {
         viewModelScope.launch {
             settingsRepository.setIMEIMode(mode)
         }
     }
+
+    // Предупреждение при первом переключении в режим API
+    val hasShownAPIWarningFlow = settingsRepository.hasShownAPIWarningFlow
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false
+        )
+    fun setAPIWarningShown() {
+        viewModelScope.launch {
+            settingsRepository.setAPIWarningShown()
+        }
+    }
+    fun setIMEIModeWithWarning(newMode: IMEIMode) {
+        viewModelScope.launch {
+            // Если переключаем на API и ещё не показывали — отложить смену режима
+            val alreadyShown = hasShownAPIWarningFlow.first()
+            if (newMode == IMEIMode.API && !alreadyShown) {
+                _showAPIWarningEvent.emit(Unit)
+            } else {
+                settingsRepository.setIMEIMode(newMode)
+            }
+        }
+    }
+    // Канал для UI-события
+    private val _showAPIWarningEvent = MutableSharedFlow<Unit>()
+    val showAPIWarningEvent = _showAPIWarningEvent.asSharedFlow()
 
     // Динамические цвета MD3
     val useDynamicColoursFlow = settingsRepository.useDynamicColoursFlow
@@ -34,7 +63,6 @@ class SettingsViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = true
         )
-
     fun setDynamicColoursEnabled(enabled: Boolean) {
         viewModelScope.launch {
             settingsRepository.setDynamicColoursEnabled(enabled)
@@ -48,7 +76,6 @@ class SettingsViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = ThemeMode.SYSTEM
         )
-
     fun setThemeMode(mode: ThemeMode) {
         viewModelScope.launch {
             settingsRepository.setThemeMode(mode)

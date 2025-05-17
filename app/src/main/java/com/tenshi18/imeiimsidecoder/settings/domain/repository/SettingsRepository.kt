@@ -10,6 +10,10 @@ interface SettingsRepository {
     val IMEIModeFlow: Flow<IMEIMode>
     suspend fun setIMEIMode(mode: IMEIMode)
 
+    // Предупреждение при первом переключении в режим API
+    val hasShownAPIWarningFlow: Flow<Boolean>
+    suspend fun setAPIWarningShown()
+
     // Динамические цвета MD3
     val useDynamicColoursFlow: Flow<Boolean>
     suspend fun setDynamicColoursEnabled(enabled: Boolean)

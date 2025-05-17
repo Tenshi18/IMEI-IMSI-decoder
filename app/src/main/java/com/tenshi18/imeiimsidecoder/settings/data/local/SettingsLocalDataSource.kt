@@ -36,6 +36,18 @@ class SettingsLocalDataSource(
         }
     }
 
+    // Ключ для предупреждения при первом переключении в режим API
+    private val API_WARNING_SHOWN_KEY = booleanPreferencesKey("api_warning_shown")
+    val hasShownAPIWarningFlow: Flow<Boolean> = context.settingsDataStore.data
+        .map { preferences ->
+            preferences[API_WARNING_SHOWN_KEY] ?: false
+        }
+
+    suspend fun setAPIWarningShown() {
+        context.settingsDataStore.edit { prefs ->
+            prefs[API_WARNING_SHOWN_KEY] = true
+        }
+    }
 
     // Ключ для настройки "использовать динамические цвета MD3"
     private val USE_DYNAMIC_COLOURS_KEY = booleanPreferencesKey("use_dynamic_colours")

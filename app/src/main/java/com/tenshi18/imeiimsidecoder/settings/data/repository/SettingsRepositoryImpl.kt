@@ -16,6 +16,12 @@ class SettingsRepositoryImpl(
         localDataSource.setIMEIMode(mode)
     }
 
+    // Предупреждение при первом переключении в режим API
+    override val hasShownAPIWarningFlow: Flow<Boolean> = localDataSource.hasShownAPIWarningFlow
+    override suspend fun setAPIWarningShown() {
+        localDataSource.setAPIWarningShown()
+    }
+
     // Динамические цвета MD3
     override val useDynamicColoursFlow: Flow<Boolean>
         get() = localDataSource.useDynamicColoursFlow
