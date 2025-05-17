@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
 import com.tenshi18.imeiimsidecoder.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -21,6 +22,21 @@ private val Context.settingsDataStore by preferencesDataStore(
 class SettingsLocalDataSource(
     private val context: Context
 ) {
+    // Ключ для настройки "режим работы с IMEI (локальная БД или API)"
+    private val IMEI_MODE_KEY = stringPreferencesKey("imei_mode")
+    val IMEIModeFlow: Flow<IMEIMode> = context.settingsDataStore.data
+        .map { preferences ->
+            val modeString = preferences[IMEI_MODE_KEY] ?: IMEIMode.LOCAL.name
+            runCatching { IMEIMode.valueOf(modeString) }.getOrDefault(IMEIMode.LOCAL)
+        }
+
+    suspend fun setIMEIMode(mode: IMEIMode) {
+        context.settingsDataStore.edit { prefs ->
+            prefs[IMEI_MODE_KEY] = mode.name
+        }
+    }
+
+
     // Ключ для настройки "использовать динамические цвета MD3"
     private val USE_DYNAMIC_COLOURS_KEY = booleanPreferencesKey("use_dynamic_colours")
 

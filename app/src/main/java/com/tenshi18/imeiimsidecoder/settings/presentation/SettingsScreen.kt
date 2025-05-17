@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
 import com.tenshi18.imeiimsidecoder.ui.theme.ThemeMode
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,6 +35,7 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel,
     navController: NavHostController
 ) {
+    val currentIMEIMode by settingsViewModel.IMEIModeFlow.collectAsState()
     val useDynamicColours by settingsViewModel.useDynamicColoursFlow.collectAsState()
     val themeMode by settingsViewModel.themeModeFlow.collectAsState()
 
@@ -52,6 +54,19 @@ fun SettingsScreen(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
+
+            PreferenceGroupTitle("Работа с IMEI")
+            SwitchPreference(
+                modifier = Modifier.fillMaxWidth(),
+                title = { Text("Режим работы с IMEI") },
+                description = when (currentIMEIMode) {
+                    IMEIMode.LOCAL -> "Использовать локальную базу TAC"
+                    IMEIMode.API -> "Декодировать IMEI по API"
+                },
+                checked = currentIMEIMode == IMEIMode.LOCAL,
+                onCheckedChange = { settingsViewModel.setIMEIMode(if (it) IMEIMode.LOCAL else IMEIMode.API) }
+            )
+
             PreferenceGroupTitle("Внешний вид")
 
             // Динамические цвета MD3
@@ -76,7 +91,7 @@ fun SettingsScreen(
         }
     }
 
-    // Если showDialog == true, показываем диалог
+    // Если showDialog == true, показываем диалог выбора темы
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
@@ -152,32 +167,3 @@ fun SettingsScreen(
         )
     }
 }
-
-//class DummySettingsRepository : SettingsRepository {
-//
-//    private val _useDynamicColours = MutableStateFlow(false)
-//    override val useDynamicColoursFlow: StateFlow<Boolean> = _useDynamicColours
-//
-//    override suspend fun setDynamicColoursEnabled(enabled: Boolean) {
-//        _useDynamicColours.value = enabled
-//    }
-//
-//    private val _isDarkTheme = MutableStateFlow(false)
-//    override val isDarkThemeFlow: StateFlow<Boolean> = _isDarkTheme
-//    override suspend fun setDarkThemeEnabled(enabled: Boolean) {
-//        _isDarkTheme.value = enabled
-//    }
-//}
-//
-//// Предпросмотр
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewSettingsScreen() {
-//    val dummyRepo = DummySettingsRepository()
-//
-//    val dummyViewModel = SettingsViewModel(dummyRepo)
-//
-//    IMEIIMSIDecoderTheme(useDynamicColours = false, isDarkTheme = false) {
-//        SettingsScreen(settingsViewModel = dummyViewModel)
-//    }
-//}
