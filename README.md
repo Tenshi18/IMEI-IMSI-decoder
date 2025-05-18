@@ -8,7 +8,8 @@
 [<img src="./download-sources-images/codeberg.png" height="40">](https://codeberg.org/Tenshi18/IMEI-IMSI-decoder/releases/latest)
 [<img src="./download-sources-images/github.png" height="40">](https://github.com/Tenshi18/IMEI-IMSI-decoder/releases)
 
-
+## Скоро будет реализовано:
+- [ ] Возможность декодировать IMEI по API (сетевые запросы к https://alpha.imeicheck.com/api/ с актуальной базой TAC) и переключать режим работы (локальная БД/API).
 
 ## Экраны
 - Декодирование IMEI.
@@ -38,6 +39,3 @@
 ## Источники БД
 - TAC (IMEI): http://tacdb.osmocom.org/
 - MCC/MNC (IMSI): https://mcc-mnc.net/
-
-## Скоро будет реализовано:
-- [ ] Возможность декодировать IMEI по API (сетевые запросы к https://alpha.imeicheck.com/api/ с актуальной базой TAC) и переключать режим работы (локальная БД/API).
