@@ -1,6 +1,3 @@
-import com.android.tools.r8.internal.ks
-import org.gradle.kotlin.dsl.annotationProcessor
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -99,4 +96,8 @@ dependencies {
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     ksp(libs.moshi.kotlin.codegen)
+
+    // Retrofit для работы с API
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
 }
