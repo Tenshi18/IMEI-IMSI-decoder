@@ -1,8 +1,8 @@
-package com.tenshi18.imeiimsidecoder.db.remote.service
+package com.tenshi18.imeiimsidecoder.remote.service
 
 import retrofit2.http.GET
 import retrofit2.http.Query
-import com.tenshi18.imeiimsidecoder.db.remote.model.APIIMEIResponse
+import com.tenshi18.imeiimsidecoder.remote.model.APIIMEIResponse
 
 interface IMEIAPIService {
     @GET("api/modelBrandName")
