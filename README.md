@@ -12,10 +12,12 @@
 - [x] Возможность декодировать IMEI по API (сетевые запросы к https://alpha.imeicheck.com/api/ с актуальной базой TAC) и переключать режим работы (локальная БД/API).
 
 ## Интерфейс приложения
-<img src="./app-screenshots/1.png" height="480">
-<img src="./app-screenshots/2.png" height="480">
-<img src="./app-screenshots/3.png" height="480">
-<img src="./app-screenshots/4.png" height="480">
+<p align="left">
+   <img src="./app-screenshots/1.png" height="504">
+   <img src="./app-screenshots/2.png" height="504">
+   <img src="./app-screenshots/3.png" height="504">
+   <img src="./app-screenshots/4.png" height="504">
+</p>
 
 ## Экраны
 - Декодирование IMEI.
