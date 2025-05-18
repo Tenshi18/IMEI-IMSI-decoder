@@ -37,3 +37,6 @@
 ## Источники БД
 - TAC (IMEI): http://tacdb.osmocom.org/
 - MCC/MNC (IMSI): https://mcc-mnc.net/
+
+## Скоро будет реализовано:
+- [ ] Возможность декодировать IMEI по API (сетевые запросы к https://alpha.imeicheck.com/api/ с актуальной базой TAC) и переключать режим работы (локальная БД/API).
