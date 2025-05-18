@@ -37,5 +37,5 @@
 3. Синхронизируйте проект, соберите AAB/APK с помощью "Build" -> "Generate app bundles or APKs".
 
 ## Источники БД
-- TAC (IMEI): http://tacdb.osmocom.org/
-- MCC/MNC (IMSI): https://mcc-mnc.net/
+- TAC (IMEI): http://tacdb.osmocom.org/ (CC-BY-SA v3.0)
+- MCC/MNC (IMSI): https://mcc-mnc.net/ (MIT Open Source license)
