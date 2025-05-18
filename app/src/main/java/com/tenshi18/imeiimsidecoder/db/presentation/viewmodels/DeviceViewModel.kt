@@ -7,13 +7,19 @@ import com.tenshi18.imeiimsidecoder.db.data.local.TAC
 import com.tenshi18.imeiimsidecoder.db.domain.repository.DeviceRepository
 import com.tenshi18.imeiimsidecoder.history.domain.model.HistoryItem
 import com.tenshi18.imeiimsidecoder.history.domain.repository.HistoryRepository
+import com.tenshi18.imeiimsidecoder.remote.model.APIIMEIResponse
+import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
+import com.tenshi18.imeiimsidecoder.settings.domain.repository.SettingsRepository
+import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class DeviceViewModel(
     private val deviceRepository: DeviceRepository,
-    private val historyRepository: HistoryRepository
+    private val historyRepository: HistoryRepository,
+    private val settingsViewModel: SettingsViewModel,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     // Храним результат декодирования IMEI
@@ -26,21 +32,57 @@ class DeviceViewModel(
 
     fun decodeIMEI(imei: String) {
         viewModelScope.launch {
-            // Извлекаем первые 8 цифр IMEI (TAC)
-            val tacString = imei.take(8)
-            val tacInt = tacString.toIntOrNull() ?: return@launch
-            val result = deviceRepository.getTAC(tacInt)
-            _imeiResult.value = result
 
-            // Сохраняем результат в историю (для отображения на HistoryScreen)
-            historyRepository.addHistoryItem(
-                HistoryItem(
-                    type = "IMEI",
-                    value = imei,
-                    decoded = result?.toString() ?: "Не удалось декодировать",
-                    timestamp = System.currentTimeMillis()
+            when (settingsViewModel.IMEIModeFlow.value) {
+
+                IMEIMode.LOCAL -> {
+                // Извлекаем первые 8 цифр IMEI (TAC)
+                val tacString = imei.take(8)
+                val tacInt = tacString.toIntOrNull() ?: return@launch
+                val result = deviceRepository.getTAC(tacInt)
+                _imeiResult.value = result
+
+                // Сохраняем результат в историю (для отображения на HistoryScreen)
+                historyRepository.addHistoryItem(
+                    HistoryItem(
+                        type = "IMEI",
+                        value = imei,
+                        decoded = result?.toString() ?: "Не удалось декодировать",
+                        timestamp = System.currentTimeMillis()
+                    )
                 )
-            )
+            }
+                IMEIMode.API -> {
+                    try {
+                        val apiResp: APIIMEIResponse = deviceRepository.getModelBrandNameFromAPI(imei)
+                        val mapped = TAC(
+                            tac   = apiResp.imei.take(8).toIntOrNull() ?: 0,
+                            brand = apiResp.objectInfo.brand,
+                            model = apiResp.objectInfo.model,
+                            aka = apiResp.objectInfo.modelName
+                        )
+                        _imeiResult.value = mapped
+                        historyRepository.addHistoryItem(
+                            HistoryItem(
+                                type = "IMEI",
+                                value = imei,
+                                decoded = mapped.toString(),
+                                timestamp = System.currentTimeMillis()
+                            )
+                        )
+                    } catch (e: Exception) {
+                        _imeiResult.value = null
+                        historyRepository.addHistoryItem(
+                            HistoryItem(
+                                type = "IMEI",
+                                value = imei,
+                                decoded = "Ошибка API: ${e.localizedMessage}",
+                                timestamp = System.currentTimeMillis()
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 

@@ -12,9 +12,9 @@ android {
     defaultConfig {
         applicationId = "com.tenshi18.imeiimsidecoder"
         minSdk = 30
-        targetSdk = 35
-        versionCode = 2
-        versionName = "0.2"
+        targetSdk = 36
+        versionCode = 3
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

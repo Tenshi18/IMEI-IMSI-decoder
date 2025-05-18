@@ -45,23 +45,11 @@ class MainActivity : ComponentActivity() {
 
         val historyViewModel = HistoryViewModel(historyRepository)
 
-        // Фабрика DeviceViewModel
-        val deviceFactory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                if (modelClass.isAssignableFrom(DeviceViewModel::class.java)) {
-                    @Suppress("UNCHECKED_CAST")
-                    return DeviceViewModel(deviceRepository, historyRepository) as T
-                }
-                throw IllegalArgumentException("Unknown ViewModel class")
-            }
-        }
-
-        val deviceViewModel = ViewModelProvider(this, deviceFactory)[DeviceViewModel::class.java]
-
         // Настройки
         val localDataSource = SettingsLocalDataSource(applicationContext)
         val settingsRepository = SettingsRepositoryImpl(localDataSource)
 
+        // Фабрика SettingsViewModel
         val settingsFactory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
@@ -73,6 +61,19 @@ class MainActivity : ComponentActivity() {
         }
 
         val settingsViewModel = ViewModelProvider(this, settingsFactory)[SettingsViewModel::class.java]
+
+        // Фабрика DeviceViewModel
+        val deviceFactory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(DeviceViewModel::class.java)) {
+                    @Suppress("UNCHECKED_CAST")
+                    return DeviceViewModel(deviceRepository, historyRepository, settingsViewModel, settingsRepository) as T
+                }
+                throw IllegalArgumentException("Unknown ViewModel class")
+            }
+        }
+
+        val deviceViewModel = ViewModelProvider(this, deviceFactory)[DeviceViewModel::class.java]
 
         enableEdgeToEdge()
         setContent {

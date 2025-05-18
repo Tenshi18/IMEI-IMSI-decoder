@@ -39,6 +39,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -48,6 +50,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tenshi18.imeiimsidecoder.db.presentation.viewmodels.DeviceViewModel
 import com.tenshi18.imeiimsidecoder.history.presentation.screens.HistoryScreen
 import com.tenshi18.imeiimsidecoder.history.presentation.viewmodels.HistoryViewModel
+import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
 import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsScreen
 import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
 import com.tenshi18.imeiimsidecoder.ui.screens.IMEIScreen
@@ -66,12 +69,21 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
 
     val showBottomBar = (currentRoute != "Settings")
 
+    val imeiModeState by settingsViewModel.IMEIModeFlow
+        .collectAsStateWithLifecycle(
+            initialValue = IMEIMode.LOCAL,
+            lifecycle = LocalLifecycleOwner.current.lifecycle
+        )
+
     val screenTitle = when (currentRoute) {
-        "IMEI" -> "IMEI"
+        "IMEI" -> when (imeiModeState) {
+            IMEIMode.LOCAL -> "IMEI (локальная БД)"
+            IMEIMode.API -> "IMEI (запросы к API)"
+        }
         "IMSI" -> "IMSI"
         "History" -> "История"
         "Settings" -> "Настройки"
-        else -> "IMEI"
+        else -> "Decoder"
     }
 
     // Три пункта нижней навигации
@@ -174,7 +186,7 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
     ) { paddingValues ->
         Box(modifier = Modifier) {
             NavHost(navController = navController, startDestination = "IMEI") {
-                composable("IMEI") { Column(modifier = Modifier.padding(paddingValues)) { IMEIScreen(deviceViewModel) } }
+                composable("IMEI") { Column(modifier = Modifier.padding(paddingValues)) { IMEIScreen(deviceViewModel, settingsViewModel) } }
                 composable("IMSI") { Column(modifier = Modifier.padding(paddingValues)) { IMSIScreen(deviceViewModel) } }
                 composable("History") { Column(modifier = Modifier.padding(paddingValues)) { HistoryScreen(historyViewModel = historyViewModel) } }
                 composable("Settings") { SettingsScreen(settingsViewModel, navController) }
