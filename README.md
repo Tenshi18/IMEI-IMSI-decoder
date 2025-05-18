@@ -13,10 +13,10 @@
 
 ## Интерфейс приложения
 <p align="left">
-   <img src="./app-screenshots/1.png" height="504">
-   <img src="./app-screenshots/2.png" height="504">
-   <img src="./app-screenshots/3.png" height="504">
-   <img src="./app-screenshots/4.png" height="504">
+   <img src="./app-screenshots/1.png" height="480">
+   <img src="./app-screenshots/2.png" height="480">
+   <img src="./app-screenshots/3.png" height="480">
+   <img src="./app-screenshots/4.png" height="480">
 </p>
 
 ## Экраны
