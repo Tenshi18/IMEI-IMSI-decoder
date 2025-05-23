@@ -1,8 +1,9 @@
 package com.tenshi18.imeiimsidecoder.db.data.local
 
 import androidx.room.Entity
+import androidx.room.Index
 
-@Entity(tableName = "mcc_mnc", primaryKeys = ["mcc", "mnc"])
+@Entity(tableName = "mcc_mnc", primaryKeys = ["mcc", "mnc"], indices = [Index(value = ["mcc", "mnc"])])
 data class MCCMNC(
     val mcc: Int,
     val mnc: Int,
