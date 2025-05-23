@@ -2,7 +2,7 @@
 
 ## [RU] ● [[EN](./README-en.md)]
 
-Нативное Android-приложение для декодирования IMEI и IMSI
+## Нативное Android-приложение для декодирования IMEI и IMSI
 
 [![Лицензия: AGPL v3](https://img.shields.io/badge/Лицензия-AGPLv3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 
