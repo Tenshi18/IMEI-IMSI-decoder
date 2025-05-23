@@ -1,6 +1,6 @@
 # IMEI & IMSI Decoder <img src="./app/src/main/res/mipmap-hdpi/ic_launcher_foreground.webp" height="28">
 
-## [[EN](./README-en.md)]
+## [RU] ● [[EN](./README-en.md)]
 
 Нативное Android-приложение для декодирования IMEI и IMSI
 
