@@ -49,10 +49,10 @@
 
 ## Coming Soon
 - [x] Option to decode IMEI via API (network requests to https://alpha.imeicheck.com/api/ with the latest TAC database) and switch between local DB/API.
-- [ ] Adapt IMSI decoding for 3-digit MNCs.
+- [x] Adapt IMSI decoding for 3-digit MNCs.
+- [x] Cache network requests.
+- [x] Optimize database queries (DAO).
 - [ ] Improved input validation: show an error immediately if IMEI/IMSI is of invalid length or contains invalid characters.
-- [ ] Cache network requests.
-- [ ] Optimize database queries (DAO).
 - [ ] Export/import query history (JSON/CSV) for backups.
 - [ ] "Copy to clipboard" option directly from the results screen.
 - [ ] Multilingual UI (Russian and English) instead of hardcoded strings.
