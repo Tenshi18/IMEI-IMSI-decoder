@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
         // TAC и MCC/MNC (DeviceRepository)
         val tacDao = DatabaseProviderTac.getDatabase(applicationContext).tacDao()
         val mccMncDao = DatabaseProviderMCCMNC.getDatabase(applicationContext).mccMncDao()
-        val deviceRepository = DeviceRepositoryImpl(tacDao, mccMncDao)
+        val deviceRepository = DeviceRepositoryImpl(tacDao, mccMncDao, applicationContext)
 
         // История
         val moshi = Moshi.Builder()

@@ -1,5 +1,6 @@
 package com.tenshi18.imeiimsidecoder.db.data.repository
 
+import android.content.Context
 import com.tenshi18.imeiimsidecoder.db.data.local.MCCMNC
 import com.tenshi18.imeiimsidecoder.db.data.local.MCCMNCDao
 import com.tenshi18.imeiimsidecoder.db.data.local.TAC
@@ -12,15 +13,17 @@ import kotlinx.coroutines.withContext
 
 class DeviceRepositoryImpl(
     private val tacDao: TACDao,
-    private val mccMncDao: MCCMNCDao
-
+    private val mccMncDao: MCCMNCDao,
+    private val context: Context
 ) : DeviceRepository {
 
     override suspend fun getModelBrandNameFromAPI(imei: String): APIIMEIResponse =
         withContext(Dispatchers.IO) {
-            IMEIAPIClient.IMEIService.getModelBrandName(imei)
+            val service = IMEIAPIClient.createService(context)
+            service.getModelBrandName(imei)
         }
 
-    override suspend fun getTAC(tac: Int) : TAC? = tacDao.getTAC(tac)
-    override suspend fun getMCCMNC(mcc: Int, mnc: Int) : MCCMNC? = mccMncDao.getMCCMNC(mcc, mnc)
+    override suspend fun getTAC(tac: Int): TAC? = tacDao.getTAC(tac)
+
+    override suspend fun getMCCMNC(mcc: Int, mnc: Int): MCCMNC? = mccMncDao.getMCCMNC(mcc, mnc)
 }
