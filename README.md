@@ -8,9 +8,6 @@
 [<img src="./download-sources-images/codeberg.png" height="40">](https://codeberg.org/Tenshi18/IMEI-IMSI-decoder/releases/latest)
 [<img src="./download-sources-images/github.png" height="40">](https://github.com/Tenshi18/IMEI-IMSI-decoder/releases)
 
-## Уже в релизе 1.0
-- [x] Возможность декодировать IMEI по API (сетевые запросы к https://alpha.imeicheck.com/api/ с актуальной базой TAC) и переключать режим работы (локальная БД/API).
-
 ## Интерфейс приложения
 <p align="left">
    <img src="./app-screenshots/1.png" height="360">
@@ -47,3 +44,15 @@
 ## Источники БД
 - TAC (IMEI): http://tacdb.osmocom.org/ (CC-BY-SA v3.0)
 - MCC/MNC (IMSI): https://mcc-mnc.net/ (MIT Open Source license)
+
+## Скоро будет реализовано
+- [x] Возможность декодировать IMEI по API (сетевые запросы к https://alpha.imeicheck.com/api/ с актуальной базой TAC) и переключать режим работы (локальная БД/API).
+- [ ] Адаптация декодирования IMSI под трёхзначные MNC.
+- [ ] Кэширование сетевых запросов.
+- [ ] Оптимизация запросов к базе данных (DAO).
+- [ ] Экспорт/импорт истории запросов (JSON/CSV) для резервного копирования.
+- [ ] Функция "Копировать в буфер обмена" прямо из экрана результатов.
+- [ ] Мультиязычный интерфейс (русский и английский) вместо захардкоженных строк.
+- [ ] Переключатель чёрной темы (Pure Black) в настройках внешнего вида приложения.
+- [ ] Улучшенная валидация ввода: отображение ошибки сразу, если IMEI/IMSI не соотвествует по длине или содержит недопустимые символы.
+- [ ] Плавные анимации переходов между экранами.
