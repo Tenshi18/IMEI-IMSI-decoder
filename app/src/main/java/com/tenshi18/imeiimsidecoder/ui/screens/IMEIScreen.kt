@@ -22,7 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -39,6 +41,7 @@ import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
 fun IMEIScreen(deviceViewModel: DeviceViewModel, settingsViewModel: SettingsViewModel) {
     val imeiResult by deviceViewModel.imeiResult.collectAsState()
     var imeiInput by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     val imeiModeState by settingsViewModel.IMEIModeFlow
         .collectAsStateWithLifecycle(
@@ -46,7 +49,8 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel, settingsViewModel: SettingsView
             lifecycle = LocalLifecycleOwner.current.lifecycle
         )
 
-    val context = LocalContext.current
+
+    val clipboardManager = LocalClipboardManager.current
 
     Column(
         modifier = Modifier
@@ -84,7 +88,7 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel, settingsViewModel: SettingsView
         ) {
             when (imeiModeState) {
                 IMEIMode.LOCAL -> {
-                    Text("Примеры (нажмите):")
+                    Text("Примеры (нажмите, чтобы подставить):")
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -118,7 +122,7 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel, settingsViewModel: SettingsView
                     }
                 }
                 IMEIMode.API -> {
-                    Text("Примеры (нажмите):")
+                    Text("Примеры (нажмите, чтобы подставить):")
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -165,8 +169,25 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel, settingsViewModel: SettingsView
                     Text("Бренд: ${result.brand}")
                     Text("Модель: ${result.model}")
                     Text("AKA: ${result.aka}")
+
+                    Spacer(Modifier.height(16.dp))
+
+                    // Кнопка "копировать результат в буфер обмена"
+                    Button(
+                        onClick = {  clipboardManager.setText(AnnotatedString(
+                            "IMEI: ${imeiInput}\n" +
+                                "Бренд: ${imeiResult?.brand}\n" +
+                                "Модель: ${imeiResult?.model}\n" +
+                                "AKA: ${imeiResult?.aka}"
+                        )) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Копировать результат в буфер обмена")
+                    }
                 }
             }
+
+
         }
     }
 }

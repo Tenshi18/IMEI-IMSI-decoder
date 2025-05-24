@@ -25,6 +25,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
@@ -36,6 +38,8 @@ fun IMSIScreen(deviceViewModel: DeviceViewModel) {
     val imsiResult by deviceViewModel.imsiResult.collectAsState()
     var imsiInput by remember { mutableStateOf("") }
     val context = LocalContext.current
+
+    val clipboardManager = LocalClipboardManager.current
 
     Column(
         modifier = Modifier
@@ -72,7 +76,7 @@ fun IMSIScreen(deviceViewModel: DeviceViewModel) {
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            Text("Примеры (нажмите):")
+            Text("Примеры (нажмите, чтобы подставить):")
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
@@ -80,14 +84,24 @@ fun IMSIScreen(deviceViewModel: DeviceViewModel) {
                 Text(
                     text = buildAnnotatedString {
                         append("МТС: ")
-                        withStyle(style = SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray.copy(alpha = 0.2f))) { append("250012345678901") }
+                        withStyle(
+                            style = SpanStyle(
+                                fontFamily = FontFamily.Monospace,
+                                background = Color.LightGray.copy(alpha = 0.2f)
+                            )
+                        ) { append("250012345678901") }
                     },
                     modifier = Modifier.fillMaxWidth().clickable { imsiInput = "250012345678901" }
                 )
                 Text(
                     text = buildAnnotatedString {
                         append("Мегафон: ")
-                        withStyle(style = SpanStyle(fontFamily = FontFamily.Monospace, background = Color.LightGray.copy(alpha = 0.2f))) { append("250023456789012") }
+                        withStyle(
+                            style = SpanStyle(
+                                fontFamily = FontFamily.Monospace,
+                                background = Color.LightGray.copy(alpha = 0.2f)
+                            )
+                        ) { append("250023456789012") }
                     },
                     modifier = Modifier.fillMaxWidth().clickable { imsiInput = "250023456789012" }
                 )
@@ -103,12 +117,38 @@ fun IMSIScreen(deviceViewModel: DeviceViewModel) {
                 ) {
                     Text("MCC: ${result.mcc}")
                     Text("MNC: ${result.mnc}")
+                    Text("PLMN: ${result.plmn}")
                     Text("Регион: ${result.region}")
                     Text("Страна: ${result.country}")
-                    Text("ISO код страны: ${result.iso}")
+                    Text("ISO-код страны: ${result.iso}")
                     Text("Оператор: ${result.operator}")
                     Text("Бренд: ${result.brand}")
                     Text("Частоты: ${result.bands}")
+
+                    Spacer(Modifier.height(16.dp))
+
+                    // Кнопка "копировать результат в буфер обмена"
+                    Button(
+                        onClick = {
+                            clipboardManager.setText(
+                                AnnotatedString(
+                                    "IMSI: ${imsiInput}\n" +
+                                        "MCC: ${imsiResult?.mcc}\n" +
+                                        "MNC: ${imsiResult?.mnc}\n" +
+                                        "PLMN: ${imsiResult?.plmn}\n" +
+                                        "Регион: ${imsiResult?.region}\n" +
+                                        "Страна: ${imsiResult?.country}\n" +
+                                        "ISO-код страны: ${imsiResult?.iso}\n" +
+                                        "Оператор: ${imsiResult?.operator}\n" +
+                                        "Бренд: ${imsiResult?.brand}\n" +
+                                        "Частоты: ${imsiResult?.bands}"
+                                )
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Копировать результат в буфер обмена")
+                    }
                 }
             }
         }
