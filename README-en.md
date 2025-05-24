@@ -53,7 +53,7 @@
 - [x] Cache network requests.
 - [x] Optimize database queries (DAO).
 - [x] "Copy to clipboard" button in the results section.
-- [ ] Improved input validation: show an error immediately if IMEI/IMSI is of invalid length or contains invalid characters.
+- [ ] Loading animation while waiting for API response.
 - [ ] Export/import query history (JSON/CSV) for backups.
 - [ ] Multilingual UI (Russian and English) instead of hardcoded strings.
 - [ ] Pure Black theme toggle in app's appearance settings.
