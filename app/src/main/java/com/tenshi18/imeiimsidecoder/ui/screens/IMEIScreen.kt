@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,18 +40,18 @@ import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
 
 @Composable
 fun IMEIScreen(deviceViewModel: DeviceViewModel, settingsViewModel: SettingsViewModel) {
-    val imeiResult by deviceViewModel.imeiResult.collectAsState()
-    var imeiInput by remember { mutableStateOf("") }
     val context = LocalContext.current
-
+    val clipboardManager = LocalClipboardManager.current
+    val imeiResult by deviceViewModel.imeiResult.collectAsState()
     val imeiModeState by settingsViewModel.IMEIModeFlow
         .collectAsStateWithLifecycle(
             initialValue = IMEIMode.LOCAL,
             lifecycle = LocalLifecycleOwner.current.lifecycle
         )
 
+    val isApiResponseLoading by deviceViewModel.isApiResponseLoading.collectAsState()
 
-    val clipboardManager = LocalClipboardManager.current
+    var imeiInput by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -186,8 +187,9 @@ fun IMEIScreen(deviceViewModel: DeviceViewModel, settingsViewModel: SettingsView
                     }
                 }
             }
-
-
+            if (isApiResponseLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+            }
         }
     }
 }

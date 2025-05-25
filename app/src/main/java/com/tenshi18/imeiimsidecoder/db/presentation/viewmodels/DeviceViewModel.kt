@@ -9,17 +9,16 @@ import com.tenshi18.imeiimsidecoder.history.domain.model.HistoryItem
 import com.tenshi18.imeiimsidecoder.history.domain.repository.HistoryRepository
 import com.tenshi18.imeiimsidecoder.remote.model.APIIMEIResponse
 import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
-import com.tenshi18.imeiimsidecoder.settings.domain.repository.SettingsRepository
 import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class DeviceViewModel(
     private val deviceRepository: DeviceRepository,
     private val historyRepository: HistoryRepository,
     private val settingsViewModel: SettingsViewModel,
-    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     // Храним результат декодирования IMEI
@@ -29,6 +28,10 @@ class DeviceViewModel(
     // Храним результат декодирования IMSI
     private val _imsiResult = MutableStateFlow<MCCMNC?>(null)
     val imsiResult: StateFlow<MCCMNC?> = _imsiResult
+
+    // Состояние загрузки ответа API
+    private val _isApiResponseLoading = MutableStateFlow(false)
+    val isApiResponseLoading: StateFlow<Boolean> = _isApiResponseLoading.asStateFlow()
 
     fun decodeIMEI(imei: String) {
         viewModelScope.launch {
@@ -53,6 +56,7 @@ class DeviceViewModel(
                 )
             }
                 IMEIMode.API -> {
+                    _isApiResponseLoading.value = true
                     try {
                         val apiResp: APIIMEIResponse = deviceRepository.getModelBrandNameFromAPI(imei)
                         val mapped = TAC(
@@ -80,6 +84,9 @@ class DeviceViewModel(
                                 timestamp = System.currentTimeMillis()
                             )
                         )
+                    }
+                    finally {
+                        _isApiResponseLoading.value = false
                     }
                 }
             }
