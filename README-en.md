@@ -52,9 +52,9 @@
 - [x] Adapt IMSI decoding for 3-digit MNCs.
 - [x] Cache network requests.
 - [x] Optimize database queries (DAO).
-- [ ] Improved input validation: show an error immediately if IMEI/IMSI is of invalid length or contains invalid characters.
+- [x] "Copy to clipboard" button in the results section.
+- [ ] Loading animation while waiting for API response.
 - [ ] Export/import query history (JSON/CSV) for backups.
-- [ ] "Copy to clipboard" option directly from the results screen.
 - [ ] Multilingual UI (Russian and English) instead of hardcoded strings.
 - [ ] Pure Black theme toggle in app's appearance settings.
 - [ ] Smooth animations for transitions between screens.
