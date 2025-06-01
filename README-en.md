@@ -54,7 +54,7 @@
 - [x] Optimize database queries (DAO).
 - [x] "Copy to clipboard" button in the results section.
 - [x] Loading indicator while waiting for API response.
+- [x] Pure Black theme and corresponding toggle in appearance settings.
 - [ ] Export/import query history (JSON/CSV) for backups.
 - [ ] Multilingual UI (Russian and English) instead of hardcoded strings.
-- [ ] Pure Black theme toggle in app's appearance settings.
 - [ ] Smooth animations for transitions between screens.
