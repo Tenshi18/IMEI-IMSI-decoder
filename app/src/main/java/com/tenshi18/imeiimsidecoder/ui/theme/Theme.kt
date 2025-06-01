@@ -3,10 +3,10 @@ package com.tenshi18.imeiimsidecoder.ui.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
@@ -240,6 +240,45 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+val pureBlackColorScheme = darkColorScheme(
+    primary = primaryPureBlack,
+    onPrimary = onPrimaryPureBlack,
+    primaryContainer = primaryContainerPureBlack,
+    onPrimaryContainer = onPrimaryContainerPureBlack,
+    secondary = secondaryPureBlack,
+    onSecondary = onSecondaryPureBlack,
+    secondaryContainer = secondaryContainerPureBlack,
+    onSecondaryContainer = onSecondaryContainerPureBlack,
+    tertiary = tertiaryPureBlack,
+    onTertiary = onTertiaryPureBlack,
+    tertiaryContainer = tertiaryContainerPureBlack,
+    onTertiaryContainer = onTertiaryContainerPureBlack,
+    error = errorPureBlack,
+    onError = onErrorPureBlack,
+    errorContainer = errorContainerPureBlack,
+    onErrorContainer = onErrorContainerPureBlack,
+    background = backgroundPureBlack,
+    onBackground = onBackgroundPureBlack,
+    surface = surfacePureBlack,
+    onSurface = onSurfacePureBlack,
+    surfaceVariant = surfaceVariantPureBlack,
+    onSurfaceVariant = onSurfaceVariantPureBlack,
+    outline = outlinePureBlack,
+    outlineVariant = outlineVariantPureBlack,
+    scrim = scrimPureBlack,
+    inverseSurface = inverseSurfacePureBlack,
+    inverseOnSurface = inverseOnSurfacePureBlack,
+    inversePrimary = inversePrimaryPureBlack,
+    surfaceDim = surfaceDimPureBlack,
+    surfaceBright = surfaceBrightPureBlack,
+    surfaceContainerLowest = surfaceContainerLowestPureBlack,
+    surfaceContainerLow = surfaceContainerLowPureBlack,
+    surfaceContainer = surfaceContainerPureBlack,
+    surfaceContainerHigh = surfaceContainerHighPureBlack,
+    surfaceContainerHighest = surfaceContainerHighestPureBlack,
+)
+
+
 @Immutable
 data class ColorFamily(
     val color: Color,
@@ -262,17 +301,33 @@ fun IMEIIMSIDecoderTheme(
 
     val isDark = when (themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
-        ThemeMode.DARK -> true
         ThemeMode.LIGHT -> false
+        ThemeMode.DARK -> true
+        ThemeMode.BLACK -> true
     }
 
     val colorScheme = when {
-        useDynamicColours && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && isDark -> {
-            dynamicDarkColorScheme(context)
+        useDynamicColours && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && themeMode != ThemeMode.BLACK -> {
+            if (isDark) dynamicDarkColorScheme(context)
+            else dynamicLightColorScheme(context)
         }
-        useDynamicColours && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            dynamicLightColorScheme(context)
+        useDynamicColours && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && themeMode == ThemeMode.BLACK -> {
+            val dynamicScheme = dynamicDarkColorScheme(context)
+            dynamicScheme.copy(
+                background = Color.Black,
+                surface = Color.Black,
+                surfaceVariant = Color.Black,
+                inverseOnSurface = Color.Black,
+                surfaceBright = Color.Black,
+                surfaceDim = Color.Black,
+                surfaceContainerLowest = Color.Black,
+                surfaceContainerLow = Color.Black,
+                surfaceContainer = Color.Black,
+                surfaceContainerHigh = Color.Black,
+                surfaceContainerHighest = Color.Black
+            )
         }
+        themeMode == ThemeMode.BLACK -> pureBlackColorScheme
         isDark -> darkScheme
         else -> lightScheme
     }

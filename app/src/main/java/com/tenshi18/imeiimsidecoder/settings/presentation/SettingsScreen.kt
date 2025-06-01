@@ -65,7 +65,6 @@ fun SettingsScreen(
         }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
-
             PreferenceGroupTitle("Работа с IMEI")
             SwitchPreference(
                 modifier = Modifier.fillMaxWidth(),
@@ -82,7 +81,6 @@ fun SettingsScreen(
             )
 
             PreferenceGroupTitle("Внешний вид")
-
             // Динамические цвета MD3
             SwitchPreference(
                 modifier = Modifier.fillMaxWidth(),
@@ -99,6 +97,7 @@ fun SettingsScreen(
                     ThemeMode.SYSTEM -> "Авто (системная)"
                     ThemeMode.DARK -> "Тёмная"
                     ThemeMode.LIGHT -> "Светлая"
+                    ThemeMode.BLACK -> "Чёрная"
                 },
                 onClick = { showThemeDialog = true }
             )
@@ -194,6 +193,26 @@ fun SettingsScreen(
                                 .padding(start = 8.dp)
                                 .clickable {
                                     settingsViewModel.setThemeMode(ThemeMode.LIGHT)
+                                    showThemeDialog = false
+                                }
+                        )
+                    }
+
+                    // 4. Чёрная
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        RadioButton(
+                            selected = (themeMode == ThemeMode.BLACK),
+                            onClick = {
+                                settingsViewModel.setThemeMode(ThemeMode.BLACK)
+                                showThemeDialog = false
+                            }
+                        )
+                        Text(
+                            text = "Чёрная",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .clickable {
+                                    settingsViewModel.setThemeMode(ThemeMode.BLACK)
                                     showThemeDialog = false
                                 }
                         )
