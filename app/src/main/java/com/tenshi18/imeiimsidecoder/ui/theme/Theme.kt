@@ -315,16 +315,7 @@ fun IMEIIMSIDecoderTheme(
             val dynamicScheme = dynamicDarkColorScheme(context)
             dynamicScheme.copy(
                 background = Color.Black,
-                surface = Color.Black,
-                surfaceVariant = Color.Black,
-                inverseOnSurface = Color.Black,
-                surfaceBright = Color.Black,
-                surfaceDim = Color.Black,
-                surfaceContainerLowest = Color.Black,
-                surfaceContainerLow = Color.Black,
-                surfaceContainer = Color.Black,
-                surfaceContainerHigh = Color.Black,
-                surfaceContainerHighest = Color.Black
+                surface = Color.Black
             )
         }
         themeMode == ThemeMode.BLACK -> pureBlackColorScheme
