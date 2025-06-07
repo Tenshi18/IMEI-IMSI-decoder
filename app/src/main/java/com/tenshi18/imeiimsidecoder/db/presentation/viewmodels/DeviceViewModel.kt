@@ -7,9 +7,11 @@ import com.tenshi18.imeiimsidecoder.db.data.local.TAC
 import com.tenshi18.imeiimsidecoder.db.domain.repository.DeviceRepository
 import com.tenshi18.imeiimsidecoder.history.domain.model.HistoryItem
 import com.tenshi18.imeiimsidecoder.history.domain.repository.HistoryRepository
+import com.tenshi18.imeiimsidecoder.history.utils.formatIMEIResult
 import com.tenshi18.imeiimsidecoder.remote.model.APIIMEIResponse
 import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
 import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
+import com.tenshi18.imeiimsidecoder.history.utils.formatIMSIResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,10 +50,10 @@ class DeviceViewModel(
                 // Сохраняем результат в историю (для отображения на HistoryScreen)
                 historyRepository.addHistoryItem(
                     HistoryItem(
+                        timestamp = System.currentTimeMillis(),
                         type = "IMEI",
                         value = imei,
-                        decoded = result?.toString() ?: "Не удалось декодировать",
-                        timestamp = System.currentTimeMillis()
+                        decoded = formatIMEIResult(result).toString()
                     )
                 )
             }
@@ -68,20 +70,21 @@ class DeviceViewModel(
                         _imeiResult.value = mapped
                         historyRepository.addHistoryItem(
                             HistoryItem(
+                                timestamp = System.currentTimeMillis(),
                                 type = "IMEI",
                                 value = imei,
-                                decoded = mapped.toString(),
-                                timestamp = System.currentTimeMillis()
+                                decoded = formatIMEIResult(mapped).toString()
+
                             )
                         )
                     } catch (e: Exception) {
                         _imeiResult.value = null
                         historyRepository.addHistoryItem(
                             HistoryItem(
+                                timestamp = System.currentTimeMillis(),
                                 type = "IMEI",
                                 value = imei,
-                                decoded = "Ошибка API: ${e.localizedMessage}",
-                                timestamp = System.currentTimeMillis()
+                                decoded = "Ошибка API: ${e.localizedMessage}"
                             )
                         )
                     }
@@ -112,10 +115,10 @@ class DeviceViewModel(
             // Сохраняем результат в историю (для отображения на HistoryScreen)
             historyRepository.addHistoryItem(
                 HistoryItem(
+                    timestamp = System.currentTimeMillis(),
                     type = "IMSI",
                     value = imsi,
-                    decoded = result?.toString() ?: "Не удалось декодировать",
-                    timestamp = System.currentTimeMillis()
+                    decoded = formatIMSIResult(result).toString()
                 )
             )
         }

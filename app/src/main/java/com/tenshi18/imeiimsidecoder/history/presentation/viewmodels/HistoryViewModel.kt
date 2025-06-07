@@ -20,12 +20,6 @@ class HistoryViewModel(
             initialValue = emptyList()
         )
 
-    fun addItem(item: HistoryItem) {
-        viewModelScope.launch {
-            historyRepository.addHistoryItem(item)
-        }
-    }
-
     fun clearHistory() {
         viewModelScope.launch {
             historyRepository.clearHistory()

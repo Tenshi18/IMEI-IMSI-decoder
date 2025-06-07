@@ -43,9 +43,9 @@ fun HistoryScreen(historyViewModel: HistoryViewModel) {
 @Composable
 fun HistoryItemRow(item: HistoryItem) {
     Column(modifier = Modifier.padding(8.dp)) {
+        Text(text = "Время: ${DateFormat.getDateTimeInstance().format(Date(item.timestamp))}")
         Text(text = "Тип: ${item.type}")
         Text(text = "Значение: ${item.value}")
-        Text(text = "Результат: ${item.decoded}")
-        Text(text = "Время: ${DateFormat.getDateTimeInstance().format(Date(item.timestamp))}")
+        Text(text = "Результат: \n${item.decoded}")
     }
 }
