@@ -55,6 +55,6 @@
 - [x] "Copy to clipboard" button in the results section.
 - [x] Loading indicator while waiting for API response.
 - [x] Pure Black theme and corresponding toggle in appearance settings.
+- [x] Smooth animations for transitions between screens.
 - [ ] Export/import query history (JSON/CSV) for backups.
 - [ ] Multilingual UI (Russian and English) instead of hardcoded strings.
-- [ ] Smooth animations for transitions between screens.
