@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 if (modelClass.isAssignableFrom(DeviceViewModel::class.java)) {
                     @Suppress("UNCHECKED_CAST")
-                    return DeviceViewModel(deviceRepository, historyRepository, settingsViewModel, settingsRepository) as T
+                    return DeviceViewModel(deviceRepository, historyRepository, settingsViewModel) as T
                 }
                 throw IllegalArgumentException("Unknown ViewModel class")
             }
