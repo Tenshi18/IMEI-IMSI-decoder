@@ -1,5 +1,11 @@
 package com.tenshi18.imeiimsidecoder.ui.components
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.heightIn
@@ -30,17 +36,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -186,14 +193,59 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
     ) { paddingValues ->
         Box(modifier = Modifier) {
             NavHost(navController = navController, startDestination = "IMEI") {
-                composable("IMEI") { Column(modifier = Modifier.padding(paddingValues)) { IMEIScreen(deviceViewModel, settingsViewModel) } }
-                composable("IMSI") { Column(modifier = Modifier.padding(paddingValues)) { IMSIScreen(deviceViewModel) } }
-                composable("History") { Column(modifier = Modifier.padding(paddingValues)) { HistoryScreen(historyViewModel = historyViewModel) } }
-                composable("Settings") { SettingsScreen(settingsViewModel, navController) }
+                composable(
+                    "IMEI",
+                    enterTransition = { determineTransition(this, TransitionType.ENTER, screenOrder = defaultScreenOrder) },
+                    exitTransition = { determineTransition(this, TransitionType.EXIT, screenOrder = defaultScreenOrder) },
+                    popEnterTransition = { determineTransition(this, TransitionType.POP_ENTER, screenOrder = defaultScreenOrder) },
+                    popExitTransition = { determineTransition(this, TransitionType.POP_EXIT, screenOrder = defaultScreenOrder) }
+                    ) {
+                    Column(modifier = Modifier.padding(paddingValues)) {
+                        IMEIScreen(deviceViewModel, settingsViewModel)
+                    }
+                }
+                composable(
+                    "IMSI",
+                    enterTransition = { determineTransition(this, TransitionType.ENTER, screenOrder = defaultScreenOrder) },
+                    exitTransition = { determineTransition(this, TransitionType.EXIT, screenOrder = defaultScreenOrder) },
+                    popEnterTransition = { determineTransition(this, TransitionType.POP_ENTER, screenOrder = defaultScreenOrder) },
+                    popExitTransition = { determineTransition(this, TransitionType.POP_EXIT, screenOrder = defaultScreenOrder) }
+                ) {
+                    Column(modifier = Modifier.padding(paddingValues)) {
+                        IMSIScreen(deviceViewModel)
+                    }
+                }
+                composable(
+                    "History",
+                    enterTransition = { determineTransition(this, TransitionType.ENTER, screenOrder = defaultScreenOrder) },
+                    exitTransition = { determineTransition(this, TransitionType.EXIT, screenOrder = defaultScreenOrder) },
+                    popEnterTransition = { determineTransition(this, TransitionType.POP_ENTER, screenOrder = defaultScreenOrder) },
+                    popExitTransition = { determineTransition(this, TransitionType.POP_EXIT, screenOrder = defaultScreenOrder) }
+                ) {
+                    Column(modifier = Modifier.padding(paddingValues)) {
+                        HistoryScreen(historyViewModel = historyViewModel)
+                    }
+                }
+                composable(
+                    "Settings",
+                    enterTransition = {
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(DEFAULT_ANIMATION_DURATION_MS))
+                    },
+                    exitTransition = {
+                        fadeOut(animationSpec = tween(DEFAULT_ANIMATION_DURATION_MS))
+                    },
+                    popEnterTransition = { fadeIn(animationSpec = tween(DEFAULT_ANIMATION_DURATION_MS)) },
+                    popExitTransition = {
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(DEFAULT_ANIMATION_DURATION_MS))
+                    }
+                ) {
+                    SettingsScreen(settingsViewModel, navController)
+                }
             }
         }
     }
 
+    // Диалог с информацией об IMEI и IMSI
     if (showHelpDialog) {
         AlertDialog(
             onDismissRequest = { showHelpDialog = false },
@@ -231,4 +283,98 @@ fun NavigationController(deviceViewModel: DeviceViewModel, settingsViewModel: Se
             else -> selectedItemIndex
         }
     }
+}
+
+enum class TransitionType {
+    ENTER,
+    EXIT,
+    POP_ENTER,
+    POP_EXIT
+}
+
+private val defaultScreenOrder = listOf("IMEI", "IMSI", "History")
+private const val DEFAULT_ANIMATION_DURATION_MS = 300
+
+fun <T> determineTransition(
+    scope: AnimatedContentTransitionScope<NavBackStackEntry>,
+    type: TransitionType,
+    screenOrder: List<String> = defaultScreenOrder,
+    durationMillis: Int = DEFAULT_ANIMATION_DURATION_MS
+): T? { // T будет либо EnterTransition, либо ExitTransition
+
+    val initialRoute = scope.initialState.destination.route
+    val targetRoute = scope.targetState.destination.route
+
+    // Анимации по умолчанию
+    val defaultEnter: EnterTransition = fadeIn(animationSpec = tween(durationMillis))
+    val defaultExit: ExitTransition = fadeOut(animationSpec = tween(durationMillis))
+
+    // Анимации для переходов вперед
+    val forwardEnter: EnterTransition = scope.slideIntoContainer(
+        AnimatedContentTransitionScope.SlideDirection.Left, // Въезжает слева (с правого края)
+        animationSpec = tween(durationMillis)
+    ) + defaultEnter // Добавляем fadeIn для плавности
+    val forwardExit: ExitTransition = scope.slideOutOfContainer(
+        AnimatedContentTransitionScope.SlideDirection.Left, // Уезжает влево
+        animationSpec = tween(durationMillis)
+    ) + defaultExit // Добавляем fadeOut
+
+    // Анимации для переходов назад (не pop)
+    val backwardEnter: EnterTransition = scope.slideIntoContainer(
+        AnimatedContentTransitionScope.SlideDirection.Right, // Въезжает справа (с левого края)
+        animationSpec = tween(durationMillis)
+    ) + defaultEnter
+    val backwardExit: ExitTransition = scope.slideOutOfContainer(
+        AnimatedContentTransitionScope.SlideDirection.Right, // Уезжает вправо
+        animationSpec = tween(durationMillis)
+    ) + defaultExit
+
+    // Анимации для pop-переходов
+    val popEnter: EnterTransition = scope.slideIntoContainer(
+        AnimatedContentTransitionScope.SlideDirection.Right, // Въезжает справа
+        animationSpec = tween(durationMillis)
+    ) + defaultEnter
+    val popExit: ExitTransition = scope.slideOutOfContainer(
+        AnimatedContentTransitionScope.SlideDirection.Right, // Уезжает вправо
+        animationSpec = tween(durationMillis)
+    ) + defaultExit
+
+    // Логика определения направления
+    var isForward = true // По умолчанию считаем "вперед"
+    var useDefault = false
+
+    if (initialRoute == null || targetRoute == null) {
+        useDefault = true
+    } else {
+        val fromIndex = screenOrder.indexOf(initialRoute)
+        val toIndex = screenOrder.indexOf(targetRoute)
+
+        if (fromIndex == -1 || toIndex == -1) {
+            useDefault = true // Маршрут не найден, используем дефолт
+        } else if (toIndex < fromIndex) {
+            isForward = false // Переход назад
+        } else if (fromIndex == toIndex) {
+            useDefault = true // Тот же экран (replace)
+        }
+        // Если toIndex > fromIndex, то isForward остается true
+    }
+
+    // Выбираем анимацию в зависимости от типа и направления
+    val transition: Any = when (type) {
+        TransitionType.ENTER -> {
+            if (useDefault) defaultEnter
+            else if (isForward) forwardEnter
+            else backwardEnter
+        }
+        TransitionType.EXIT -> {
+            if (useDefault) defaultExit
+            else if (isForward) forwardExit
+            else backwardExit
+        }
+        TransitionType.POP_ENTER -> popEnter
+        TransitionType.POP_EXIT -> popExit
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    return transition as? T
 }
