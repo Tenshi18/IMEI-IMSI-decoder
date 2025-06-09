@@ -7,11 +7,11 @@ import com.tenshi18.imeiimsidecoder.db.data.local.TAC
 import com.tenshi18.imeiimsidecoder.db.domain.repository.DeviceRepository
 import com.tenshi18.imeiimsidecoder.history.domain.model.HistoryItem
 import com.tenshi18.imeiimsidecoder.history.domain.repository.HistoryRepository
-import com.tenshi18.imeiimsidecoder.history.utils.formatIMEIResult
+import com.tenshi18.imeiimsidecoder.db.utils.formatIMEIResult
 import com.tenshi18.imeiimsidecoder.remote.model.APIIMEIResponse
 import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
 import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
-import com.tenshi18.imeiimsidecoder.history.utils.formatIMSIResult
+import com.tenshi18.imeiimsidecoder.db.utils.formatIMSIResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

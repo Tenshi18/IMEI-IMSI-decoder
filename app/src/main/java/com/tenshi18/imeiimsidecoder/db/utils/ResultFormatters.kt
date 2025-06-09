@@ -1,4 +1,4 @@
-package com.tenshi18.imeiimsidecoder.history.utils
+package com.tenshi18.imeiimsidecoder.db.utils
 
 import androidx.compose.ui.text.AnnotatedString
 import com.tenshi18.imeiimsidecoder.db.data.local.MCCMNC
