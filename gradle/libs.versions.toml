@@ -2,6 +2,9 @@
 agp = "8.10.1"
 converterMoshi = "2.9.0"
 datastorePreferences = "1.1.4"
+hiltAndroid = "2.56.2"
+hiltCompiler = "2.56.2"
+hiltNavigationCompose = "1.2.0"
 kotlin = "2.1.10"
 coreKtx = "1.16.0"
 junit = "4.13.2"
@@ -26,11 +29,13 @@ roomCommon = "2.7.0"
 roomKtx = "2.7.0"
 ksp = "2.1.10-1.0.31"
 toolsCore = "1.0.0-alpha13"
+hiltCommon = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore = { module = "androidx.datastore:datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-material-android = { module = "androidx.compose.material:material-android", version.ref = "materialAndroid" }
@@ -45,6 +50,8 @@ androidx-room-room-runtime = { module = "androidx.room:room-runtime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version = "2.7.0" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hiltCompiler" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -74,6 +81,7 @@ androidx-material-icons-extended = { group = "androidx.compose.material", name =
 androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 androidx-tools-core = { group = "androidx.privacysandbox.tools", name = "tools-core", version.ref = "toolsCore" }
+androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
