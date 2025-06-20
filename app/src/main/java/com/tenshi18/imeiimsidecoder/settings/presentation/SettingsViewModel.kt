@@ -1,7 +1,10 @@
 package com.tenshi18.imeiimsidecoder.settings.presentation
 
+import android.content.Context
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.tenshi18.imeiimsidecoder.history.domain.repository.HistoryRepository
 import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
 import com.tenshi18.imeiimsidecoder.settings.domain.repository.SettingsRepository
 import com.tenshi18.imeiimsidecoder.ui.theme.ThemeMode
@@ -11,9 +14,13 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class SettingsViewModel(
-    private val settingsRepository: SettingsRepository
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val settingsRepository: SettingsRepository,
+    private val historyRepository: HistoryRepository
 ) : ViewModel() {
 
     // Режим работы с IMEI (локальная БД/API)
@@ -81,4 +88,21 @@ class SettingsViewModel(
             settingsRepository.setThemeMode(mode)
         }
     }
+
+    fun exportHistoryToCsv(context: Context, uri: Uri) {
+        viewModelScope.launch {
+            val history = historyRepository.getAllHistoryItems()
+            historyRepository.exportHistoryToCsv(context, uri, history)
+        }
+    }
+
+    fun importHistoryFromCsv(context: Context, uri: Uri) {
+        viewModelScope.launch {
+            val importedItems = historyRepository.importHistoryFromCsv(context, uri)
+            if (importedItems.isNotEmpty()) {
+                historyRepository.saveImportedHistoryItems(importedItems)
+            }
+        }
+    }
+
 }

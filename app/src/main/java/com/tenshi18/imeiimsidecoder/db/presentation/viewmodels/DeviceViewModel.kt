@@ -10,17 +10,21 @@ import com.tenshi18.imeiimsidecoder.history.domain.repository.HistoryRepository
 import com.tenshi18.imeiimsidecoder.db.utils.formatIMEIResult
 import com.tenshi18.imeiimsidecoder.remote.model.APIIMEIResponse
 import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
-import com.tenshi18.imeiimsidecoder.settings.presentation.SettingsViewModel
 import com.tenshi18.imeiimsidecoder.db.utils.formatIMSIResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import com.tenshi18.imeiimsidecoder.settings.domain.repository.SettingsRepository
+import kotlinx.coroutines.flow.first
 
-class DeviceViewModel(
+@HiltViewModel
+class DeviceViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository,
     private val historyRepository: HistoryRepository,
-    private val settingsViewModel: SettingsViewModel,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     // Храним результат декодирования IMEI
@@ -37,26 +41,25 @@ class DeviceViewModel(
 
     fun decodeIMEI(imei: String) {
         viewModelScope.launch {
-
-            when (settingsViewModel.IMEIModeFlow.value) {
-
+            val imeiMode = settingsRepository.IMEIModeFlow.first()
+            when (imeiMode) {
                 IMEIMode.LOCAL -> {
-                // Извлекаем первые 8 цифр IMEI (TAC)
-                val tacString = imei.take(8)
-                val tacInt = tacString.toIntOrNull() ?: return@launch
-                val result = deviceRepository.getTAC(tacInt)
-                _imeiResult.value = result
+                    // Извлекаем первые 8 цифр IMEI (TAC)
+                    val tacString = imei.take(8)
+                    val tacInt = tacString.toIntOrNull() ?: return@launch
+                    val result = deviceRepository.getTAC(tacInt)
+                    _imeiResult.value = result
 
-                // Сохраняем результат в историю (для отображения на HistoryScreen)
-                historyRepository.addHistoryItem(
-                    HistoryItem(
-                        timestamp = System.currentTimeMillis(),
-                        type = "IMEI",
-                        value = imei,
-                        decoded = formatIMEIResult(result).toString()
+                    // Сохраняем результат в историю (для отображения на HistoryScreen)
+                    historyRepository.addHistoryItem(
+                        HistoryItem(
+                            timestamp = System.currentTimeMillis(),
+                            type = "IMEI",
+                            value = imei,
+                            decoded = formatIMEIResult(result).toString()
+                        )
                     )
-                )
-            }
+                }
                 IMEIMode.API -> {
                     _isApiResponseLoading.value = true
                     try {

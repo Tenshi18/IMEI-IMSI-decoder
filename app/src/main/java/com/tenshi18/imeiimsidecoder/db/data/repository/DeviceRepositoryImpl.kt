@@ -10,8 +10,9 @@ import com.tenshi18.imeiimsidecoder.remote.client.IMEIAPIClient
 import com.tenshi18.imeiimsidecoder.remote.model.APIIMEIResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class DeviceRepositoryImpl(
+class DeviceRepositoryImpl @Inject constructor(
     private val tacDao: TACDao,
     private val mccMncDao: MCCMNCDao,
     private val context: Context

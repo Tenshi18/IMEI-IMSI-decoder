@@ -5,8 +5,9 @@ import com.tenshi18.imeiimsidecoder.settings.domain.model.IMEIMode
 import com.tenshi18.imeiimsidecoder.settings.domain.repository.SettingsRepository
 import com.tenshi18.imeiimsidecoder.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class SettingsRepositoryImpl(
+class SettingsRepositoryImpl @Inject constructor(
     private val localDataSource: SettingsLocalDataSource
 ) : SettingsRepository {
 

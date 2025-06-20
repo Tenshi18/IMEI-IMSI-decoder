@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
+import javax.inject.Inject
 
 private const val SETTINGS_DATASTORE_NAME = "user_settings"
 
@@ -19,7 +20,7 @@ private val Context.settingsDataStore by preferencesDataStore(
     name = SETTINGS_DATASTORE_NAME
 )
 
-class SettingsLocalDataSource(
+class SettingsLocalDataSource @Inject constructor(
     private val context: Context
 ) {
     // Ключ для настройки "режим работы с IMEI (локальная БД или API)"
