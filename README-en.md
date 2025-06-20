@@ -56,5 +56,6 @@
 - [x] Loading indicator while waiting for API response.
 - [x] Pure Black theme and corresponding toggle in appearance settings.
 - [x] Smooth animations for transitions between screens.
+- [ ] Hilt implementation
 - [ ] Export/import query history (JSON/CSV) for backups.
 - [ ] Multilingual UI (Russian and English) instead of hardcoded strings.
