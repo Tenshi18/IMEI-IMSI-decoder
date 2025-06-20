@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.tools.core)
+    implementation(libs.androidx.hilt.common)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,6 +69,11 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Hilt для внедрения зависимостей
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
     // Navigation Compose для Bottom Navigation Bar
     implementation(libs.androidx.navigation.compose)
